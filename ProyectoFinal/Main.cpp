@@ -2,7 +2,7 @@
 //Morales Galicia Angel Uriel
 //Elizalde Perez Alan
 //Capistran Ponce Manuel Emiliano
-//05-05-2025
+//17-05-2025
 
 #include <iostream>
 #include <cmath>
@@ -25,7 +25,7 @@ void MouseCallback(GLFWwindow* window, double xPos, double yPos);
 void DoMovement();
 void Animation();
 
-const GLuint WIDTH = 1800, HEIGHT = 1000;
+const GLuint WIDTH = 1950, HEIGHT = 1000;
 int SCREEN_WIDTH, SCREEN_HEIGHT;
 
 Camera  camera(glm::vec3(-17.5f, 5.2f, 8.3f));
@@ -349,16 +349,7 @@ int main()
     Shader lightingShader("Shader/lighting.vs", "Shader/lighting.frag");
     Shader lampShader("Shader/lamp.vs", "Shader/lamp.frag");
 
-    Model Salon((char*)"Models/Salon.obj");
-    Model Salon2((char*)"Models/Salon2.obj");
-    Model mesaVieja((char*)"Models/mesaVieja.obj");
-    Model mesaNueva((char*)"Models/mesaNueva.obj");
-    Model sillaVieja((char*)"Models/sillaVieja.obj");
-    Model sillaNueva((char*)"Models/sillaNueva.obj");
-    Model compuVieja((char*)"Models/compuVieja.obj");
-    Model pantallaVieja((char*)"Models/monitorViejo.obj");
-    Model tecladoVieja((char*)"Models/tecladoViejo.obj");
-    Model compuNueva((char*)"Models/compuNueva.obj");
+    Model Feria((char*)"Models/Feria.obj");
 
     GLuint VBO, VAO;
     glGenVertexArrays(1, &VAO);
@@ -453,132 +444,12 @@ int main()
 
         //Carga de camara 
         view = camera.GetViewMatrix();
-        
-
-        //Mesas Viejas
-
-        for (int i = 0; i < 6; ++i) {
-            model = glm::mat4(1);
-            model = glm::translate(model, posicionesMesasViejas[i]);
-            model = glm::scale(model, glm::vec3(6.0f * scaleMesa, 3.0f * scaleMesa, 2.0f * scaleMesa));
-            glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-            mesaVieja.Draw(lightingShader);
-        }
-
-        //Mesas Nuevas
-
-        for (int i = 0; i < 6; ++i) {
-            glm::vec3 posicionOriginal = posicionesMesasNuevas[i];
-            glm::vec3 posicionAnimada = glm::vec3(
-                posicionOriginal.x,
-                posicionOriginal.y * scaleMesaNew,
-                posicionOriginal.z
-            );
-            model = glm::mat4(1);
-            model = glm::translate(model, posicionAnimada);
-            model = glm::scale(model, glm::vec3(0.02f * scaleMesaNew, 0.01f * scaleMesaNew, 0.008f * scaleMesaNew));
-            glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-            mesaNueva.Draw(lightingShader);
-        }
-
-
-        //Silla vieja
-
-        for (int i = 0; i < 9; ++i) {
-            model = glm::mat4(1);
-            model = glm::translate(model, posicionesSillasViejasR[i]);
-            model = glm::rotate(model, glm::radians(rotateSillaViejaR), glm::vec3(0.0f, 1.0f, 0.0f));
-            model = glm::scale(model, glm::vec3(0.05f * scaleSillaVieja, 0.06f * scaleSillaVieja, 0.05f * scaleSillaVieja));
-            glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-            sillaVieja.Draw(lightingShader);
-        }
-
-        for (int i = 0; i < 9; ++i) {
-            model = glm::mat4(1);
-            model = glm::translate(model, posicionesSillasViejasL[i]);
-            model = glm::rotate(model, glm::radians(rotateSillaViejaL), glm::vec3(0.0f, 1.0f, 0.0f));
-            model = glm::scale(model, glm::vec3(0.05f * scaleSillaVieja, 0.06f * scaleSillaVieja, 0.05f * scaleSillaVieja));
-            glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-            sillaVieja.Draw(lightingShader);
-        }
-
-        //Silla nueva
-
-        for (int i = 0; i < 9; ++i) {
-            model = glm::mat4(1);
-            model = glm::translate(model, posicionesSillasNuevaR[i]);
-            model = glm::rotate(model, glm::radians(rotateSillaNuevaR), glm::vec3(0.0f, 1.0f, 0.0f));
-            model = glm::scale(model, glm::vec3(3.0f * scaleSillaNueva, 3.0f * scaleSillaNueva, 3.0f * scaleSillaNueva));
-            glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-            sillaNueva.Draw(lightingShader);
-        }
-
-        for (int i = 0; i < 9; ++i) {
-            model = glm::mat4(1);
-            model = glm::translate(model, posicionesSillasNuevaL[i]);
-            model = glm::rotate(model, glm::radians(rotateSillaNuevaL), glm::vec3(0.0f, 1.0f, 0.0f));
-            model = glm::scale(model, glm::vec3(3.0f * scaleSillaNueva, 3.0f * scaleSillaNueva, 3.0f * scaleSillaNueva));
-            glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-            sillaNueva.Draw(lightingShader);
-        }
-
-        //CompuPantalla vieja
-
-        for (int i = 0; i < 18; ++i) {
-            model = glm::mat4(1);
-            model = glm::translate(model, posicionesCompuVieja[i]);
-            model = glm::rotate(model, glm::radians(270.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-            model = glm::scale(model, glm::vec3(0.03f * scaleCompuVieja, 0.03f * scaleCompuVieja, 0.03f * scaleCompuVieja));
-            glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-            compuVieja.Draw(lightingShader);
-        }
-
-        //Pantalla vieja
-
-        for (int i = 0; i < 18; ++i) {
-            glm::vec3 posicion = posicionesPantallaVieja[i];
-            posicion.y += alturaRebote;
-            model = glm::mat4(1);
-            model = glm::translate(model, posicion);
-            model = glm::scale(model, glm::vec3(0.4f * scalePantallaVieja, 0.4f * scalePantallaVieja, 0.4f * scalePantallaVieja));
-            glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-            pantallaVieja.Draw(lightingShader);
-        }
-
-        //Teclado vieja
-
-        for (int i = 0; i < 18; ++i) {
-            model = glm::mat4(1);
-            model = glm::translate(model, posicionesTecladoVieja[i]);
-            model = glm::scale(model, glm::vec3(3.0f * scaleTecladoVieja, 3.0f * scaleTecladoVieja, 3.0f * scaleTecladoVieja));
-            glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-            tecladoVieja.Draw(lightingShader);
-        }
-
-        //Compu nueva
-
-        for (int i = 0; i < 18; ++i) {
-            model = glm::mat4(1);
-            glm::vec3 posicion = posicionesCompuNueva[i];
-            posicion.y += alturaCompuNueva;
-            model = glm::mat4(1);
-            model = glm::translate(model, posicion);
-            model = glm::scale(model, glm::vec3(7.0f * scaleCompuNueva, 7.0f * scaleCompuNueva, 7.0f * scaleCompuNueva));
-            glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-            compuNueva.Draw(lightingShader);
-        }
 
         //Salon
 
         model = glm::mat4(1);
-        model = glm::scale(model, glm::vec3(1.0f * scaleSalonV, 1.0f * scaleSalonV, 1.0f * scaleSalonV));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-        Salon.Draw(lightingShader);
-
-        model = glm::mat4(1);
-        model = glm::scale(model, glm::vec3(1.0f * scaleSalonN, 1.0f * scaleSalonN, 1.0f * scaleSalonN));
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-        Salon2.Draw(lightingShader);
+        Feria.Draw(lightingShader);
         
 
         lampShader.Use();
