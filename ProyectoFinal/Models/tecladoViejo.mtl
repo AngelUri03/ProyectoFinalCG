@@ -1,0 +1,13 @@
+# Blender 4.1.0 MTL File: 'keyboard_razer.blend'
+# www.blender.org
+
+newmtl keyboard_new_MAT
+Ns 63.117920
+Ka 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ni 1.500000
+d 1.000000
+illum 3
+map_Kd texturas_tecladoViejo/computer_keyboard_01_BaseColor.jpg
+map_Ke texturas_tecladoViejo/computer_keyboard_01_Emissive.jpg
+map_Bump -bm 0.500000 texturas_tecladoViejo/computer_keyboard_01_Normal.jpg

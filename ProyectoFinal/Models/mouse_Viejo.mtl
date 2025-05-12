@@ -1,0 +1,74 @@
+# Blender 4.0.1 MTL File: 'HP Mouse.blend'
+# www.blender.org
+
+newmtl Scroll_Wheel_Side
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+illum 2
+map_Kd Scroll Wheel texturas_mouseViejo/Side_BaseColor.png
+map_Ns Scroll Wheel texturas_mouseViejo/Side_Roughness.png
+map_refl Scroll Wheel texturas_mouseViejo/Side_Metallic.png
+map_d Scroll Wheel texturas_mouseViejo/Side_Alpha.png
+map_Bump -bm 1.000000 texturas_mouseViejo/Scroll Wheel Side_Normal.png
+
+newmtl cable
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+illum 2
+map_Kd texturas_mouseViejo/cable_BaseColor.png
+map_Ns texturas_mouseViejo/cable_Roughness.png
+map_refl texturas_mouseViejo/cable_Metallic.png
+map_d texturas_mouseViejo/cable_Alpha.png
+map_Bump -bm 1.000000 texturas_mouseViejo/cable_Normal.png
+
+newmtl cable_end
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+illum 2
+map_Kd cable texturas_mouseViejo/end_BaseColor.png
+map_Ns cable texturas_mouseViejo/end_Roughness.png
+map_refl cable texturas_mouseViejo/end_Metallic.png
+map_d cable texturas_mouseViejo/end_Alpha.png
+map_Bump -bm 1.000000 texturas_mouseViejo/cable end_Normal.png
+
+newmtl main_body
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+illum 2
+map_Kd main texturas_mouseViejo/body_BaseColor.png
+map_Ns main texturas_mouseViejo/body_Roughness.png
+map_refl main texturas_mouseViejo/body_Metallic.png
+map_d main texturas_mouseViejo/body_Alpha.png
+map_Bump -bm 1.000000 texturas_mouseViejo/main body_Normal.png
+
+newmtl rubber_feet
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+illum 2
+map_Kd rubber texturas_mouseViejo/feet_BaseColor.png
+map_Ns rubber texturas_mouseViejo/feet_Roughness.png
+map_refl rubber texturas_mouseViejo/feet_Metallic.png
+map_d rubber texturas_mouseViejo/feet_Alpha.png
+map_Bump -bm 1.000000 texturas_mouseViejo/rubber feet_Normal.png
+
+newmtl scroll_wheel
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+illum 2
+map_Kd scroll texturas_mouseViejo/wheel_BaseColor.png
+map_Ns scroll texturas_mouseViejo/wheel_Roughness.png
+map_refl scroll texturas_mouseViejo/wheel_Metallic.png
+map_d scroll texturas_mouseViejo/wheel_Alpha.png
+map_Bump -bm 1.000000 texturas_mouseViejo/scroll wheel_Normal.png
