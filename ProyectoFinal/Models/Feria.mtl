@@ -39,6 +39,26 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
 illum 2
+map_Kd texturas_feria/Carpa6.jpg
+
+newmtl Carpa2
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd texturas_feria/Carpa4.jpg
+
+newmtl Carpa3
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
 map_Kd texturas_feria/Carpa3.jpg
 
 newmtl Carpa4
@@ -50,6 +70,26 @@ Ni 1.500000
 d 1.000000
 illum 2
 map_Kd texturas_feria/Carpa4.jpg
+
+newmtl Carpa5
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd texturas_feria/Carpa5.jpg
+
+newmtl Carpa6
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd texturas_feria/Carpa6.jpg
 
 newmtl CarpaTecho
 Ns 250.000000
@@ -210,3 +250,163 @@ Ni 1.500000
 d 1.000000
 illum 1
 map_Kd texturas_feria/Verde1.jpg
+
+newmtl blinn1.003
+Ns 93.770653
+Ka 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd texturas_feria/valla.jpg
+
+newmtl blinn1.004
+Ns 93.770653
+Ka 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd texturas_feria/valla.jpg
+
+newmtl blinn1.005
+Ns 93.770653
+Ka 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd texturas_feria/valla.jpg
+
+newmtl blinn1.006
+Ns 93.770653
+Ka 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd texturas_feria/valla.jpg
+
+newmtl blinn1.007
+Ns 93.770653
+Ka 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd texturas_feria/valla.jpg
+
+newmtl blinn1.008
+Ns 93.770653
+Ka 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd texturas_feria/valla.jpg
+
+newmtl blinn1.009
+Ns 93.770653
+Ka 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd texturas_feria/valla.jpg
+
+newmtl blinn1.010
+Ns 93.770653
+Ka 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd texturas_feria/valla.jpg
+
+newmtl blinn1.011
+Ns 93.770653
+Ka 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd texturas_feria/valla.jpg
+
+newmtl blinn1.012
+Ns 93.770653
+Ka 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd texturas_feria/valla.jpg
+
+newmtl blinn1.013
+Ns 93.770653
+Ka 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd texturas_feria/valla.jpg
+
+newmtl blinn1.014
+Ns 93.770653
+Ka 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd texturas_feria/valla.jpg
+
+newmtl blinn1.015
+Ns 93.770653
+Ka 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd texturas_feria/valla.jpg
+
+newmtl blinn1.016
+Ns 93.770653
+Ka 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd texturas_feria/valla.jpg
+
+newmtl blinn1.017
+Ns 93.770653
+Ka 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd texturas_feria/valla.jpg
+
+newmtl blinn1.018
+Ns 93.770653
+Ka 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd texturas_feria/valla.jpg
