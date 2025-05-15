@@ -61,6 +61,9 @@ float rotateSillaNuevaR = 270.0f;
 float rotateSillaNuevaL = 270.0f;
 float scaleSillaNueva = 0.0f;
 
+// Variables globales para Topos
+float topoA = 0;
+
 glm::vec3 posicionesMesasViejas[] = {
     glm::vec3(6.5f,  0.0f, -5.5f),
     glm::vec3(6.5f,  0.0f, -0.5f),
@@ -350,6 +353,11 @@ int main()
     Shader lampShader("Shader/lamp.vs", "Shader/lamp.frag");
 
     Model Feria((char*)"Models/Feria.obj");
+    // Modelos Topos
+	Model cajaTopos((char*)"Models/topos/cajaTopos.obj");
+	Model toposA((char*)"Models/topos/toposA.obj");
+	Model toposB((char*)"Models/topos/toposB.obj");
+	Model mazo((char*)"Models/topos/mazo.obj");
 
     GLuint VBO, VAO;
     glGenVertexArrays(1, &VAO);
@@ -445,12 +453,76 @@ int main()
         //Carga de camara 
         view = camera.GetViewMatrix();
 
-        //Salon
 
         model = glm::mat4(1);
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         Feria.Draw(lightingShader);
+        //Cajon topos
+        glm::mat4 modelTempTopos = glm::mat4(1.0f); //Temp
+        glm::mat4 modelTempTopos2 = glm::mat4(1.0f); //Temp
+        glm::mat4 modelTempTopos3 = glm::mat4(1.0f); //Temp
         
+        model = glm::mat4(1);
+        modelTempTopos = model = glm::translate(model, glm::vec3(-17.0f, 0.0f, 24.0f));
+        modelTempTopos = model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelTempTopos = model = glm::scale(modelTempTopos, glm::vec3(0.65f, 0.65f, 0.65f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        cajaTopos.Draw(lightingShader);
+        // ToposA
+		model = modelTempTopos;
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        toposA.Draw(lightingShader);
+        //ToposB
+        model = modelTempTopos;
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        toposB.Draw(lightingShader);
+		//Mazo
+        model = modelTempTopos;
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        mazo.Draw(lightingShader);
+
+        //Topos izquierda
+        // caja topos 2
+        modelTempTopos2 = glm::translate(modelTempTopos, glm::vec3(-7.5f, 0.0f, 0.0f));
+		model = modelTempTopos2;
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        cajaTopos.Draw(lightingShader);
+        // ToposA Izquierda
+        model = modelTempTopos2;
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        toposA.Draw(lightingShader);
+		//ToposB Izquierda
+        model = modelTempTopos2;
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        toposB.Draw(lightingShader);
+		//Mazo Izquierda
+        model = modelTempTopos2;
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        mazo.Draw(lightingShader);
+
+        //Topos derecha
+        // caja topos 3
+        modelTempTopos3 = glm::translate(modelTempTopos, glm::vec3(7.5f, 0.0f, 0.0f));
+        model = modelTempTopos3;
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        cajaTopos.Draw(lightingShader);
+        // ToposA Izquierda
+        model = modelTempTopos3;
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        toposA.Draw(lightingShader);
+        //ToposB Izquierda
+        model = modelTempTopos3;
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        toposB.Draw(lightingShader);
+        //Mazo Izquierda
+        model = modelTempTopos3;
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        mazo.Draw(lightingShader);
+
+
+
+
+
 
         lampShader.Use();
         modelLoc = glGetUniformLocation(lampShader.Program, "model");
