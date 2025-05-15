@@ -336,7 +336,7 @@ int main()
     glfwGetFramebufferSize(window, &SCREEN_WIDTH, &SCREEN_HEIGHT);
     glfwSetKeyCallback(window, KeyCallback);
     glfwSetCursorPosCallback(window, MouseCallback);
-    
+
     glewExperimental = GL_TRUE;
 
     if (GLEW_OK != glewInit())
@@ -351,13 +351,22 @@ int main()
 
     Shader lightingShader("Shader/lighting.vs", "Shader/lighting.frag");
     Shader lampShader("Shader/lamp.vs", "Shader/lamp.frag");
-
+    //modelos
+    //##################################################################################################################################
     Model Feria((char*)"Models/Feria.obj");
     // Modelos Topos
-	Model cajaTopos((char*)"Models/topos/cajaTopos.obj");
-	Model toposA((char*)"Models/topos/toposA.obj");
-	Model toposB((char*)"Models/topos/toposB.obj");
-	Model mazo((char*)"Models/topos/mazo.obj");
+    Model cajaTopos((char*)"Models/topos/cajaTopos.obj");
+    Model toposA((char*)"Models/topos/toposA.obj");
+    Model toposB((char*)"Models/topos/toposB.obj");
+    Model mazo((char*)"Models/topos/mazo.obj");
+    //modelos boliche 
+    Model boliche((char*)"Models/boliche.obj");
+    Model caparazon((char*)"Models/caparazon.obj");
+    Model pino((char*)"Models/pino.obj");
+    //Modelos zona de bateo
+    Model bateo((char*)"Models/zona_bateo.obj");
+    Model bate((char*)"Models/Bate.obj");
+    Model pelota((char*)"Models/Pelota.obj");
 
     GLuint VBO, VAO;
     glGenVertexArrays(1, &VAO);
@@ -461,7 +470,6 @@ int main()
         glm::mat4 modelTempTopos = glm::mat4(1.0f); //Temp
         glm::mat4 modelTempTopos2 = glm::mat4(1.0f); //Temp
         glm::mat4 modelTempTopos3 = glm::mat4(1.0f); //Temp
-        
         model = glm::mat4(1);
         modelTempTopos = model = glm::translate(model, glm::vec3(-17.0f, 0.0f, 24.0f));
         modelTempTopos = model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -520,9 +528,35 @@ int main()
         mazo.Draw(lightingShader);
 
 
+        //bolos 
+        glm::mat4 modelTempBolos = glm::mat4(1.0f); //Temp
+        glm::mat4 modelTempBolos2 = glm::mat4(1.0f); //Temp
+        glm::mat4 modelTempBolos3 = glm::mat4(1.0f); //Temp
+        model = glm::mat4(1.0f);
+        modelTempBolos = model = glm::translate(model, glm::vec3(35.0f, 0.1f, 0.0f)); // Ajusta posición según tu escena
+        modelTempBolos = model = model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+        modelTempBolos = model = glm::scale(model, glm::vec3(0.35f, 0.24f, 0.40f)); // Escala si es necesario
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        boliche.Draw(lightingShader);
+        //caparazon
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(32.0f, 0.1f, 0.2f)); // Ajusta posición
+        model = glm::scale(model, glm::vec3(0.2f)); // Escala si es muy grande
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        caparazon.Draw(lightingShader);
 
 
-
+        //Zona de bateo
+        glm::mat4 modelTempBateo = glm::mat4(1.0f); //Temp
+        glm::mat4 modelTempBateo2 = glm::mat4(1.0f); //Temp
+        glm::mat4 modelTempBateo3 = glm::mat4(1.0f); //Temp
+        model = glm::mat4(1.0f);
+        modelTempBateo = model = glm::translate(model, glm::vec3(-35.0f, 0.1f, 0.0f)); // Ajusta posición según tu escena
+        modelTempBateo = model = model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+        modelTempBateo = model = glm::scale(model, glm::vec3(0.35f, 0.24f, 0.40f)); // Escala si es necesario
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        bateo.Draw(lightingShader);
+        
 
         lampShader.Use();
         modelLoc = glGetUniformLocation(lampShader.Program, "model");
