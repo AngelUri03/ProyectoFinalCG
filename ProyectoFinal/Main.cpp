@@ -70,6 +70,9 @@ glm::vec3 translateRick = glm::vec3(0.0f, 0.0f, 45.0f) ;
 float rotateRick = 90.0f;
 bool caminando = false;
 
+// Variables globales para Topos
+float topoA = 0;
+
 glm::vec3 posicionesMesasViejas[] = {
     glm::vec3(6.5f,  0.0f, -5.5f),
     glm::vec3(6.5f,  0.0f, -0.5f),
@@ -177,7 +180,7 @@ int main()
     glfwGetFramebufferSize(window, &SCREEN_WIDTH, &SCREEN_HEIGHT);
     glfwSetKeyCallback(window, KeyCallback);
     glfwSetCursorPosCallback(window, MouseCallback);
-    
+
     glewExperimental = GL_TRUE;
 
     if (GLEW_OK != glewInit())
@@ -192,14 +195,43 @@ int main()
 
     Shader lightingShader("Shader/lighting.vs", "Shader/lighting.frag");
     Shader lampShader("Shader/lamp.vs", "Shader/lamp.frag");
-
+    //modelos
+    //##################################################################################################################################
     Model Feria((char*)"Models/Feria.obj");
+<<<<<<< HEAD
     Model RickCuerpo((char*)"Models/RickCuerpo.obj");
     Model RickCabeza((char*)"Models/RickCabeza.obj");
     Model RickBrazoD((char*)"Models/RickBrazoD.obj");
     Model RickBrazoI((char*)"Models/RickBrazoI.obj");
     Model RickPiernaD((char*)"Models/RickPiernaD.obj");
     Model RickPiernaI((char*)"Models/RickPiernaI.obj");
+=======
+    // Modelos Topos
+    Model cajaTopos((char*)"Models/topos/cajaTopos.obj");
+    Model toposA((char*)"Models/topos/toposA.obj");
+    Model toposB((char*)"Models/topos/toposB.obj");
+    Model mazo((char*)"Models/topos/mazo.obj");
+
+    //Modelos Globos
+    Model cajaGlobos((char*)"Models/globos/cajaGlobos.obj");
+    Model dardo1((char*)"Models/globos/dardo1.obj");
+    Model dardo2((char*)"Models/globos/dardo2.obj");
+    Model dardo3((char*)"Models/globos/dardo3.obj");
+    Model globo1((char*)"Models/globos/globo1.obj");
+	Model globo2((char*)"Models/globos/globo2.obj");
+	Model globo3((char*)"Models/globos/globo3.obj");
+
+
+    //modelos boliche 
+    Model boliche((char*)"Models/boliche.obj");
+    Model caparazon((char*)"Models/caparazon.obj");
+    Model pino((char*)"Models/pino.obj");
+
+    //Modelos zona de bateo
+    Model bateo((char*)"Models/zona_bateo.obj");
+    Model bate((char*)"Models/Bate.obj");
+    Model pelota((char*)"Models/Pelota.obj");
+>>>>>>> 56ff5722a880d51654f6e5643b8dc757369f91a5
 
     GLuint VBO, VAO;
     glGenVertexArrays(1, &VAO);
@@ -342,6 +374,7 @@ int main()
 
         glm::mat4 model(1);
 
+<<<<<<< HEAD
         model = glm::mat4(1);
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         Feria.Draw(lightingShader);
@@ -385,7 +418,266 @@ int main()
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelPiernaI));
         RickPiernaI.Draw(lightingShader);
 
+=======
+        //Carga de camara 
+        view = camera.GetViewMatrix();
 
+
+        model = glm::mat4(1);
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        Feria.Draw(lightingShader);
+        //Cajon topos
+        glm::mat4 modelTempTopos = glm::mat4(1.0f); //Temp
+        glm::mat4 modelTempTopos2 = glm::mat4(1.0f); //Temp
+        glm::mat4 modelTempTopos3 = glm::mat4(1.0f); //Temp
+        model = glm::mat4(1);
+        modelTempTopos = model = glm::translate(model, glm::vec3(-17.0f, 0.0f, 24.0f));
+        modelTempTopos = model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelTempTopos = model = glm::scale(modelTempTopos, glm::vec3(0.65f, 0.65f, 0.65f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        cajaTopos.Draw(lightingShader);
+        // ToposA
+		model = modelTempTopos;
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        toposA.Draw(lightingShader);
+        //ToposB
+        model = modelTempTopos;
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        toposB.Draw(lightingShader);
+		//Mazo
+        model = modelTempTopos;
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        mazo.Draw(lightingShader);
+>>>>>>> 56ff5722a880d51654f6e5643b8dc757369f91a5
+
+        //Topos izquierda
+        // caja topos 2
+        modelTempTopos2 = glm::translate(modelTempTopos, glm::vec3(-7.5f, 0.0f, 0.0f));
+		model = modelTempTopos2;
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        cajaTopos.Draw(lightingShader);
+        // ToposA Izquierda
+        model = modelTempTopos2;
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        toposA.Draw(lightingShader);
+		//ToposB Izquierda
+        model = modelTempTopos2;
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        toposB.Draw(lightingShader);
+		//Mazo Izquierda
+        model = modelTempTopos2;
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        mazo.Draw(lightingShader);
+
+        //Topos derecha
+        // caja topos 3
+        modelTempTopos3 = glm::translate(modelTempTopos, glm::vec3(7.5f, 0.0f, 0.0f));
+        model = modelTempTopos3;
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        cajaTopos.Draw(lightingShader);
+        // ToposA Izquierda
+        model = modelTempTopos3;
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        toposA.Draw(lightingShader);
+        //ToposB Izquierda
+        model = modelTempTopos3;
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        toposB.Draw(lightingShader);
+        //Mazo Izquierda
+        model = modelTempTopos3;
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        mazo.Draw(lightingShader);
+
+		//Cajon globos
+		glm::mat4 modelTempGlobos = glm::mat4(1.0f); //Temp
+		glm::mat4 modelTempGlobos2 = glm::mat4(1.0f); //Temp
+		glm::mat4 modelTempGlobos3 = glm::mat4(1.0f); //Temp
+		model = glm::mat4(1);
+		modelTempGlobos = model = glm::translate(model, glm::vec3(17.0f, 0.0f, 24.0f));
+		//modelTempGlobos = model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelTempGlobos = model = glm::scale(modelTempGlobos, glm::vec3(0.40f, 0.40f, 0.40f));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		cajaGlobos.Draw(lightingShader);
+		//Dardo 1
+		model = modelTempGlobos;
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		dardo1.Draw(lightingShader);
+		//Dardo 2
+		model = modelTempGlobos;
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		dardo2.Draw(lightingShader);
+		//Dardo 3
+		model = modelTempGlobos;
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		dardo3.Draw(lightingShader);
+		//Globo 1
+		model = modelTempGlobos;
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		globo1.Draw(lightingShader);
+		//Globo 2
+		model = modelTempGlobos;
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		globo2.Draw(lightingShader);
+		//Globo 3
+		model = modelTempGlobos;
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		globo3.Draw(lightingShader);
+		//Cajon globos izquierda
+		// caja globos 2
+		modelTempGlobos2 = glm::translate(modelTempGlobos, glm::vec3(-12.0f, 0.0f, 0.0f));
+		model = modelTempGlobos2;
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		cajaGlobos.Draw(lightingShader);
+		//Dardo 1 Izquierda
+		model = modelTempGlobos2;
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		dardo1.Draw(lightingShader);
+		//Dardo 2 Izquierda
+		model = modelTempGlobos2;
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		dardo2.Draw(lightingShader);
+		//Dardo 3 Izquierda
+		model = modelTempGlobos2;
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		dardo3.Draw(lightingShader);
+		//Globo 1 Izquierda
+		model = modelTempGlobos2;
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		globo1.Draw(lightingShader);
+		//Globo 2 Izquierda
+		model = modelTempGlobos2;
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		globo2.Draw(lightingShader);
+		//Globo 3 Izquierda
+		model = modelTempGlobos2;
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		globo3.Draw(lightingShader);
+		//Cajon globos derecha
+		// caja globos 3
+		modelTempGlobos3 = glm::translate(modelTempGlobos, glm::vec3(12.0f, 0.0f, 0.0f));
+		model = modelTempGlobos3;
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		cajaGlobos.Draw(lightingShader);
+		//Dardo 1 Derecha
+		model = modelTempGlobos3;
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		dardo1.Draw(lightingShader);
+		//Dardo 2 Derecha
+		model = modelTempGlobos3;
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		dardo2.Draw(lightingShader);
+		//Dardo 3 Derecha
+		model = modelTempGlobos3;
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		dardo3.Draw(lightingShader);
+		//Globo 1 Derecha
+		model = modelTempGlobos3;
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		globo1.Draw(lightingShader);
+		//Globo 2 Derecha
+		model = modelTempGlobos3;
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		globo2.Draw(lightingShader);
+		//Globo 3 Derecha
+		model = modelTempGlobos3;
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		globo3.Draw(lightingShader);
+
+
+
+        //bolos 
+        glm::mat4 modelTempBolos = glm::mat4(1.0f); //Temp
+        glm::mat4 modelTempBolos2 = glm::mat4(1.0f); //Temp
+        glm::mat4 modelTempBolos3 = glm::mat4(1.0f); //Temp
+        model = glm::mat4(1.0f);
+        modelTempBolos = model = glm::translate(model, glm::vec3(35.0f, 0.1f, 0.0f)); // Ajusta posición según tu escena
+        modelTempBolos = model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+        modelTempBolos = model = glm::scale(model, glm::vec3(0.35f, 0.24f, 0.40f)); // Escala si es necesario
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        boliche.Draw(lightingShader);
+        //caparazones
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(32.0f, 0.1f, 0.2f)); // Ajusta posición
+        model = glm::scale(model, glm::vec3(0.2f)); // Escala si es muy grande
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        caparazon.Draw(lightingShader);
+        //2
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(32.0f, 0.1f, 1.8f)); // Ajusta posición
+        model = glm::scale(model, glm::vec3(0.2f)); // Escala si es muy grande
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        caparazon.Draw(lightingShader);
+        //3
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(32.0f, 0.1f, 3.4f)); // Ajusta posición
+        model = glm::scale(model, glm::vec3(0.2f)); // Escala si es muy grande
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        caparazon.Draw(lightingShader);
+        //4
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(32.0f, 0.1f, 5.0f)); // Ajusta posición
+        model = glm::scale(model, glm::vec3(0.2f)); // Escala si es muy grande
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        caparazon.Draw(lightingShader);
+        //5
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(32.0f, 0.1f, -1.4f)); // Ajusta posición
+        model = glm::scale(model, glm::vec3(0.2f)); // Escala si es muy grande
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        caparazon.Draw(lightingShader);
+        //6
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(32.0f, 0.1f, -3.0f)); // Ajusta posición
+        model = glm::scale(model, glm::vec3(0.2f)); // Escala si es muy grande
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        caparazon.Draw(lightingShader);
+        //7
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(32.0f, 0.1f, -4.6f)); // Ajusta posición
+        model = glm::scale(model, glm::vec3(0.2f)); // Escala si es muy grande
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        caparazon.Draw(lightingShader);
+
+        // Pinos rotados 90 grados: punta mirando hacia el origen
+        std::vector<glm::vec3> posicionesPinos = {
+            glm::vec3(30.6f, 0.5f, -5.0f),      // Pino 1 (punta)
+
+            glm::vec3(30.75f, 0.5f, -4.9f),     // Fila 2
+            glm::vec3(30.75f, 0.5f, -5.1f),
+
+            glm::vec3(30.9f, 0.5f, -4.8f),      // Fila 3
+            glm::vec3(30.9f, 0.5f, -5.0f),
+            glm::vec3(30.9f, 0.5f, -5.2f),
+
+            glm::vec3(31.05f, 0.5f, -4.7f),     // Fila 4
+            glm::vec3(31.05f, 0.5f, -4.9f),
+            glm::vec3(31.05f, 0.5f, -5.1f),
+            glm::vec3(31.05f, 0.5f, -5.3f)
+        };
+
+        // Dibuja los pinos con rotación de 90° en eje Y para que apunten al origen
+        for (const auto& posicion : posicionesPinos) {
+            model = glm::mat4(1.0f);
+            model = glm::translate(model, posicion);
+            model = glm::scale(model, glm::vec3(0.08f));
+            glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+            pino.Draw(lightingShader);
+        }
+
+
+
+        //Zona de bateo
+        glm::mat4 modelTempBateo = glm::mat4(1.0f); //Temp
+        glm::mat4 modelTempBateo2 = glm::mat4(1.0f); //Temp
+        glm::mat4 modelTempBateo3 = glm::mat4(1.0f); //Temp
+        model = glm::mat4(1.0f);
+        modelTempBateo = model = glm::translate(model, glm::vec3(-35.0f, 0.1f, 0.0f)); // Ajusta posición según tu escena
+        modelTempBateo = model = model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+        modelTempBateo = model = glm::scale(model, glm::vec3(0.35f, 0.24f, 0.40f)); // Escala si es necesario
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        bateo.Draw(lightingShader);
+        
+        
         lampShader.Use();
         modelLoc = glGetUniformLocation(lampShader.Program, "model");
         viewLoc = glGetUniformLocation(lampShader.Program, "view");
