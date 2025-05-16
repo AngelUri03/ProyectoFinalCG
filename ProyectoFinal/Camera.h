@@ -115,6 +115,26 @@ public:
 
 	}
 
+	void SetPosition(const glm::vec3& pos) {
+		this->position = pos;
+	}
+
+	void SetFront(const glm::vec3& frontVec) {
+		this->front = glm::normalize(frontVec);
+	}
+
+	void SetYaw(GLfloat newYaw) {
+		this->yaw = newYaw;
+	}
+
+	void SetPitch(GLfloat newPitch) {
+		this->pitch = newPitch;
+	}
+
+	void UpdateVectors() {
+		updateCameraVectors();
+	}
+
 	GLfloat GetZoom()
 	{
 		return this->zoom;

@@ -1,0 +1,42 @@
+# Blender 4.3.2 MTL File: 'Rick.blend'
+# www.blender.org
+
+newmtl Amarillo
+Ns 96.078453
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd texturas_rick/Amarillo.jpg
+
+newmtl Azul2
+Ns 96.078453
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd texturas_rick/Azul2.jpg
+
+newmtl Blanco
+Ns 96.078453
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd texturas_rick/Blanco.jpg
+
+newmtl Cafe1
+Ns 96.078453
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd texturas_rick/Cafe1.jpg
