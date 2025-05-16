@@ -359,10 +359,12 @@ int main()
     Model toposA((char*)"Models/topos/toposA.obj");
     Model toposB((char*)"Models/topos/toposB.obj");
     Model mazo((char*)"Models/topos/mazo.obj");
+
     //modelos boliche 
     Model boliche((char*)"Models/boliche.obj");
     Model caparazon((char*)"Models/caparazon.obj");
     Model pino((char*)"Models/pino.obj");
+
     //Modelos zona de bateo
     Model bateo((char*)"Models/zona_bateo.obj");
     Model bate((char*)"Models/Bate.obj");
@@ -534,16 +536,79 @@ int main()
         glm::mat4 modelTempBolos3 = glm::mat4(1.0f); //Temp
         model = glm::mat4(1.0f);
         modelTempBolos = model = glm::translate(model, glm::vec3(35.0f, 0.1f, 0.0f)); // Ajusta posición según tu escena
-        modelTempBolos = model = model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+        modelTempBolos = model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, -1.0f, 0.0f));
         modelTempBolos = model = glm::scale(model, glm::vec3(0.35f, 0.24f, 0.40f)); // Escala si es necesario
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         boliche.Draw(lightingShader);
-        //caparazon
+        //caparazones
         model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(32.0f, 0.1f, 0.2f)); // Ajusta posición
         model = glm::scale(model, glm::vec3(0.2f)); // Escala si es muy grande
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         caparazon.Draw(lightingShader);
+        //2
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(32.0f, 0.1f, 1.8f)); // Ajusta posición
+        model = glm::scale(model, glm::vec3(0.2f)); // Escala si es muy grande
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        caparazon.Draw(lightingShader);
+        //3
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(32.0f, 0.1f, 3.4f)); // Ajusta posición
+        model = glm::scale(model, glm::vec3(0.2f)); // Escala si es muy grande
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        caparazon.Draw(lightingShader);
+        //4
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(32.0f, 0.1f, 5.0f)); // Ajusta posición
+        model = glm::scale(model, glm::vec3(0.2f)); // Escala si es muy grande
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        caparazon.Draw(lightingShader);
+        //5
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(32.0f, 0.1f, -1.4f)); // Ajusta posición
+        model = glm::scale(model, glm::vec3(0.2f)); // Escala si es muy grande
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        caparazon.Draw(lightingShader);
+        //6
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(32.0f, 0.1f, -3.0f)); // Ajusta posición
+        model = glm::scale(model, glm::vec3(0.2f)); // Escala si es muy grande
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        caparazon.Draw(lightingShader);
+        //7
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(32.0f, 0.1f, -4.6f)); // Ajusta posición
+        model = glm::scale(model, glm::vec3(0.2f)); // Escala si es muy grande
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        caparazon.Draw(lightingShader);
+
+        // Pinos rotados 90 grados: punta mirando hacia el origen
+        std::vector<glm::vec3> posicionesPinos = {
+            glm::vec3(30.6f, 0.5f, -5.0f),      // Pino 1 (punta)
+
+            glm::vec3(30.75f, 0.5f, -4.9f),     // Fila 2
+            glm::vec3(30.75f, 0.5f, -5.1f),
+
+            glm::vec3(30.9f, 0.5f, -4.8f),      // Fila 3
+            glm::vec3(30.9f, 0.5f, -5.0f),
+            glm::vec3(30.9f, 0.5f, -5.2f),
+
+            glm::vec3(31.05f, 0.5f, -4.7f),     // Fila 4
+            glm::vec3(31.05f, 0.5f, -4.9f),
+            glm::vec3(31.05f, 0.5f, -5.1f),
+            glm::vec3(31.05f, 0.5f, -5.3f)
+        };
+
+        // Dibuja los pinos con rotación de 90° en eje Y para que apunten al origen
+        for (const auto& posicion : posicionesPinos) {
+            model = glm::mat4(1.0f);
+            model = glm::translate(model, posicion);
+            model = glm::scale(model, glm::vec3(0.08f));
+            glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+            pino.Draw(lightingShader);
+        }
+
 
 
         //Zona de bateo
@@ -557,7 +622,7 @@ int main()
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         bateo.Draw(lightingShader);
         
-
+        
         lampShader.Use();
         modelLoc = glGetUniformLocation(lampShader.Program, "model");
         viewLoc = glGetUniformLocation(lampShader.Program, "view");
