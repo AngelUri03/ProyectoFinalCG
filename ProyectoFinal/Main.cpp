@@ -360,6 +360,16 @@ int main()
     Model toposB((char*)"Models/topos/toposB.obj");
     Model mazo((char*)"Models/topos/mazo.obj");
 
+    //Modelos Globos
+    Model cajaGlobos((char*)"Models/globos/cajaGlobos.obj");
+    Model dardo1((char*)"Models/globos/dardo1.obj");
+    Model dardo2((char*)"Models/globos/dardo2.obj");
+    Model dardo3((char*)"Models/globos/dardo3.obj");
+    Model globo1((char*)"Models/globos/globo1.obj");
+	Model globo2((char*)"Models/globos/globo2.obj");
+	Model globo3((char*)"Models/globos/globo3.obj");
+
+
     //modelos boliche 
     Model boliche((char*)"Models/boliche.obj");
     Model caparazon((char*)"Models/caparazon.obj");
@@ -528,6 +538,102 @@ int main()
         model = modelTempTopos3;
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         mazo.Draw(lightingShader);
+
+		//Cajon globos
+		glm::mat4 modelTempGlobos = glm::mat4(1.0f); //Temp
+		glm::mat4 modelTempGlobos2 = glm::mat4(1.0f); //Temp
+		glm::mat4 modelTempGlobos3 = glm::mat4(1.0f); //Temp
+		model = glm::mat4(1);
+		modelTempGlobos = model = glm::translate(model, glm::vec3(17.0f, 0.0f, 24.0f));
+		//modelTempGlobos = model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelTempGlobos = model = glm::scale(modelTempGlobos, glm::vec3(0.40f, 0.40f, 0.40f));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		cajaGlobos.Draw(lightingShader);
+		//Dardo 1
+		model = modelTempGlobos;
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		dardo1.Draw(lightingShader);
+		//Dardo 2
+		model = modelTempGlobos;
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		dardo2.Draw(lightingShader);
+		//Dardo 3
+		model = modelTempGlobos;
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		dardo3.Draw(lightingShader);
+		//Globo 1
+		model = modelTempGlobos;
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		globo1.Draw(lightingShader);
+		//Globo 2
+		model = modelTempGlobos;
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		globo2.Draw(lightingShader);
+		//Globo 3
+		model = modelTempGlobos;
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		globo3.Draw(lightingShader);
+		//Cajon globos izquierda
+		// caja globos 2
+		modelTempGlobos2 = glm::translate(modelTempGlobos, glm::vec3(-12.0f, 0.0f, 0.0f));
+		model = modelTempGlobos2;
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		cajaGlobos.Draw(lightingShader);
+		//Dardo 1 Izquierda
+		model = modelTempGlobos2;
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		dardo1.Draw(lightingShader);
+		//Dardo 2 Izquierda
+		model = modelTempGlobos2;
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		dardo2.Draw(lightingShader);
+		//Dardo 3 Izquierda
+		model = modelTempGlobos2;
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		dardo3.Draw(lightingShader);
+		//Globo 1 Izquierda
+		model = modelTempGlobos2;
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		globo1.Draw(lightingShader);
+		//Globo 2 Izquierda
+		model = modelTempGlobos2;
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		globo2.Draw(lightingShader);
+		//Globo 3 Izquierda
+		model = modelTempGlobos2;
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		globo3.Draw(lightingShader);
+		//Cajon globos derecha
+		// caja globos 3
+		modelTempGlobos3 = glm::translate(modelTempGlobos, glm::vec3(12.0f, 0.0f, 0.0f));
+		model = modelTempGlobos3;
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		cajaGlobos.Draw(lightingShader);
+		//Dardo 1 Derecha
+		model = modelTempGlobos3;
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		dardo1.Draw(lightingShader);
+		//Dardo 2 Derecha
+		model = modelTempGlobos3;
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		dardo2.Draw(lightingShader);
+		//Dardo 3 Derecha
+		model = modelTempGlobos3;
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		dardo3.Draw(lightingShader);
+		//Globo 1 Derecha
+		model = modelTempGlobos3;
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		globo1.Draw(lightingShader);
+		//Globo 2 Derecha
+		model = modelTempGlobos3;
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		globo2.Draw(lightingShader);
+		//Globo 3 Derecha
+		model = modelTempGlobos3;
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		globo3.Draw(lightingShader);
+
 
 
         //bolos 
