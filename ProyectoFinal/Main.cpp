@@ -162,6 +162,19 @@ glm::vec3 Light1 = glm::vec3(0);
 GLfloat deltaTime = 0.0f;	
 GLfloat lastFrame = 0.0f;  
 
+//Variables animacion bolos
+bool lanzarCaparazon = false;
+float posCaparazonX = 32.0f;  // posición inicial
+float objetivoX = 37.6f;      // hasta donde están los pinos valor original 37.1
+float velocidadCaparazon = 0.02f;
+float impactoRotacion = 0.0f;
+bool pinosCaidos = false;
+float rotacionPinoCentral = 0.0f;
+float rotacionPinoAnimado = 0.0f;
+
+
+
+
 int main()
 {
     glfwInit();
@@ -198,14 +211,14 @@ int main()
     //modelos
     //##################################################################################################################################
     Model Feria((char*)"Models/Feria.obj");
-<<<<<<< HEAD
+//<<<<<<< HEAD
     Model RickCuerpo((char*)"Models/RickCuerpo.obj");
     Model RickCabeza((char*)"Models/RickCabeza.obj");
     Model RickBrazoD((char*)"Models/RickBrazoD.obj");
     Model RickBrazoI((char*)"Models/RickBrazoI.obj");
     Model RickPiernaD((char*)"Models/RickPiernaD.obj");
     Model RickPiernaI((char*)"Models/RickPiernaI.obj");
-=======
+//=======
     // Modelos Topos
     Model cajaTopos((char*)"Models/topos/cajaTopos.obj");
     Model toposA((char*)"Models/topos/toposA.obj");
@@ -231,7 +244,7 @@ int main()
     Model bateo((char*)"Models/zona_bateo.obj");
     Model bate((char*)"Models/Bate.obj");
     Model pelota((char*)"Models/Pelota.obj");
->>>>>>> 56ff5722a880d51654f6e5643b8dc757369f91a5
+//>>>>>>> 56ff5722a880d51654f6e5643b8dc757369f91a5
 
     GLuint VBO, VAO;
     glGenVertexArrays(1, &VAO);
@@ -374,7 +387,7 @@ int main()
 
         glm::mat4 model(1);
 
-<<<<<<< HEAD
+//<<<<<<< HEAD
         model = glm::mat4(1);
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         Feria.Draw(lightingShader);
@@ -418,7 +431,7 @@ int main()
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelPiernaI));
         RickPiernaI.Draw(lightingShader);
 
-=======
+//=======
         //Carga de camara 
         view = camera.GetViewMatrix();
 
@@ -448,7 +461,7 @@ int main()
         model = modelTempTopos;
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         mazo.Draw(lightingShader);
->>>>>>> 56ff5722a880d51654f6e5643b8dc757369f91a5
+//>>>>>>> 56ff5722a880d51654f6e5643b8dc757369f91a5
 
         //Topos izquierda
         // caja topos 2
@@ -595,10 +608,21 @@ int main()
         modelTempBolos = model = glm::scale(model, glm::vec3(0.35f, 0.24f, 0.40f)); // Escala si es necesario
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         boliche.Draw(lightingShader);
+
+        //animacion caparazon
+        if (lanzarCaparazon && posCaparazonX < objetivoX) {
+            posCaparazonX += velocidadCaparazon;
+            impactoRotacion += 4.0f;
+        }
+        else if (lanzarCaparazon) {
+            lanzarCaparazon = false;
+            pinosCaidos = true;  // Simula que los pinos cayeron
+        }
         //caparazones
         model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(32.0f, 0.1f, 0.2f)); // Ajusta posición
-        model = glm::scale(model, glm::vec3(0.2f)); // Escala si es muy grande
+        model = glm::translate(model, glm::vec3(posCaparazonX, 0.1f, 0.2f)); // solo se mueve en X
+        model = glm::rotate(model, glm::radians(impactoRotacion), glm::vec3(0.0f, 1.0f, 0.0f));
+        model = glm::scale(model, glm::vec3(0.2f));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         caparazon.Draw(lightingShader);
         //2
@@ -638,31 +662,56 @@ int main()
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         caparazon.Draw(lightingShader);
 
-        // Pinos rotados 90 grados: punta mirando hacia el origen
-        std::vector<glm::vec3> posicionesPinos = {
-            glm::vec3(30.6f, 0.5f, -5.0f),      // Pino 1 (punta)
 
-            glm::vec3(30.75f, 0.5f, -4.9f),     // Fila 2
-            glm::vec3(30.75f, 0.5f, -5.1f),
+        //pinos
+        // Carriles en el eje Z (mismo que caparazones)
+        std::vector<float> carrilesZ = { -4.6f, -3.0f, -1.4f, 1.8f, 3.4f, 5.0f };//0.2
+        // Triángulo apuntando hacia -X (origen), punta atrás
+        std::vector<glm::vec3> trianguloRelativo = {
+            glm::vec3(0.0f, 0.5f, 0.0f),        // Pino 1 (punta)
 
-            glm::vec3(30.9f, 0.5f, -4.8f),      // Fila 3
-            glm::vec3(30.9f, 0.5f, -5.0f),
-            glm::vec3(30.9f, 0.5f, -5.2f),
+            glm::vec3(0.15f, 0.5f, -0.1f),      // Fila 2
+            glm::vec3(-0.15f, 0.5f, -0.1f),
 
-            glm::vec3(31.05f, 0.5f, -4.7f),     // Fila 4
-            glm::vec3(31.05f, 0.5f, -4.9f),
-            glm::vec3(31.05f, 0.5f, -5.1f),
-            glm::vec3(31.05f, 0.5f, -5.3f)
+            glm::vec3(0.3f, 0.5f, -0.2f),       // Fila 3
+            glm::vec3(0.0f, 0.5f, -0.2f),
+            glm::vec3(-0.3f, 0.5f, -0.2f),
+
+            glm::vec3(0.45f, 0.5f, -0.3f),      // Fila 4
+            glm::vec3(0.15f, 0.5f, -0.3f),
+            glm::vec3(-0.15f, 0.5f, -0.3f),
+            glm::vec3(-0.45f, 0.5f, -0.3f)
         };
 
-        // Dibuja los pinos con rotación de 90° en eje Y para que apunten al origen
-        for (const auto& posicion : posicionesPinos) {
-            model = glm::mat4(1.0f);
-            model = glm::translate(model, posicion);
-            model = glm::scale(model, glm::vec3(0.08f));
-            glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-            pino.Draw(lightingShader);
+        // Si se ha activado la animación de caída
+        if (pinosCaidos && rotacionPinoAnimado < 90.0f) {
+            rotacionPinoAnimado += 2.0f; // Velocidad de caída
         }
+
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(37.1f, 0.5f, 0.2f)); // posición fija del pino central
+        model = glm::rotate(model, glm::radians(0.0f - rotacionPinoAnimado), glm::vec3(0.0f, 0.0f, 1.0f)); // cae hacia el eje Z
+        model = glm::scale(model, glm::vec3(0.08f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        pino.Draw(lightingShader);
+
+
+        // Dibuja los 7 triángulos de pinos
+        for (float zCarril : carrilesZ) {
+            for (const auto& rel : trianguloRelativo) {
+                glm::vec3 posicionPino = glm::vec3(37.1f - rel.z, rel.y, zCarril + rel.x);
+
+                model = glm::mat4(1.0f);
+                model = glm::translate(model, posicionPino);
+                model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f)); // pinos apuntando hacia el origen
+                model = glm::scale(model, glm::vec3(0.08f));
+                glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+                pino.Draw(lightingShader);
+            }
+        }
+
+
+
 
 
 
@@ -672,12 +721,53 @@ int main()
         glm::mat4 modelTempBateo3 = glm::mat4(1.0f); //Temp
         model = glm::mat4(1.0f);
         modelTempBateo = model = glm::translate(model, glm::vec3(-35.0f, 0.1f, 0.0f)); // Ajusta posición según tu escena
-        modelTempBateo = model = model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+        modelTempBateo = model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, -1.0f, 0.0f));
         modelTempBateo = model = glm::scale(model, glm::vec3(0.35f, 0.24f, 0.40f)); // Escala si es necesario
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         bateo.Draw(lightingShader);
-        
-        
+        //Pelota
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(-31.5f, 0.3f, 0.0f)); // Ajusta posición
+        model = glm::scale(model, glm::vec3(0.06f)); // Escala si es muy grande
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        pelota.Draw(lightingShader);
+        //Bate
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(-31.0f, 0.3f, 0.0f)); // Ajusta posición
+        modelTempBateo = model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+        model = glm::scale(model, glm::vec3(0.06f)); // Escala si es muy grande
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        bate.Draw(lightingShader);
+        //Pelota2 izq
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(-31.5f, 0.3f, 4.3f)); // Ajusta posición
+        model = glm::scale(model, glm::vec3(0.06f)); // Escala si es muy grande
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        pelota.Draw(lightingShader);
+        //Bate2 izq
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(-31.0f, 0.3f, 4.3f)); // Ajusta posición
+        modelTempBateo = model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+        model = glm::scale(model, glm::vec3(0.06f)); // Escala si es muy grande
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        bate.Draw(lightingShader);
+        //Pelota3 der
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(-31.5f, 0.3f, -4.3f)); // Ajusta posición
+        model = glm::scale(model, glm::vec3(0.06f)); // Escala si es muy grande
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        pelota.Draw(lightingShader);
+        //Bate3 der
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(-31.0f, 0.3f, -4.3f)); // Ajusta posición
+        modelTempBateo = model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+        model = glm::scale(model, glm::vec3(0.06f)); // Escala si es muy grande
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        bate.Draw(lightingShader);
+
+
+
+
         lampShader.Use();
         modelLoc = glGetUniformLocation(lampShader.Program, "model");
         viewLoc = glGetUniformLocation(lampShader.Program, "view");
@@ -715,8 +805,10 @@ void DoMovement()
 
         if (keys[GLFW_KEY_UP])
         {
-            translateRick.z += sin(glm::radians(-rotateRick)) * 0.02f;
-            translateRick.x += cos(glm::radians(-rotateRick)) * 0.02f;
+            /*translateRick.z += sin(glm::radians(-rotateRick)) * 0.02f;
+            translateRick.x += cos(glm::radians(-rotateRick)) * 0.02f;*/
+            translateRick.z += sin(glm::radians(-rotateRick)) * 0.07f;
+            translateRick.x += cos(glm::radians(-rotateRick)) * 0.07f;
             caminando = true;
         }
 
@@ -767,6 +859,14 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
     }
     else {
         camaraCambiada = false;
+    }
+
+    //animacion bolos
+    if (key == GLFW_KEY_B && action == GLFW_PRESS) {
+        lanzarCaparazon = true;
+        posCaparazonX = 32.0f;
+        impactoRotacion = 0.0f;
+        pinosCaidos = false;
     }
 
 
@@ -851,3 +951,7 @@ void ResetMousePosition(GLFWwindow* window) {
     camera.SetPitch(0.0f);
     camera.UpdateVectors();
 }
+
+
+
+//lineas de busqueda
