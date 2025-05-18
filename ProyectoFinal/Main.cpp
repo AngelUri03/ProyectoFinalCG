@@ -234,6 +234,22 @@ int main()
 	Model globo2((char*)"Models/globos/globo2.obj");
 	Model globo3((char*)"Models/globos/globo3.obj");
 
+    //Modelos hacha
+    Model cajaHacha((char*)"Models/hacha/cajaHacha.obj");
+    Model hacha((char*)"Models/hacha/hacha.obj");
+	Model reja((char*)"Models/hacha/reja.obj");
+
+    //Modelos dados
+	Model tarro((char*)"Models/dados/tarro.obj");
+	Model dado1((char*)"Models/dados/dado1.obj");
+	Model dado2((char*)"Models/dados/dado2.obj");
+	Model dado3((char*)"Models/dados/dado3.obj");
+	Model dado4((char*)"Models/dados/dado4.obj");
+	Model dado5((char*)"Models/dados/dado5.obj");
+	Model dadosA((char*)"Models/dados/dadosA.obj");
+	Model dadosB((char*)"Models/dados/dadosB.obj");
+	Model mesaDados((char*)"Models/dados/mesaDados.obj");
+
 
     //modelos boliche 
     Model boliche((char*)"Models/boliche.obj");
@@ -596,6 +612,45 @@ int main()
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		globo3.Draw(lightingShader);
 
+        //lanzamiento de hacha
+		glm::mat4 modelTempHacha = glm::mat4(1.0f); //Temp
+        modelTempHacha = model = glm::mat4(1.0f);
+        modelTempHacha = model = glm::translate(model, glm::vec3(17.0f, 0.15f, -22.0f));
+        modelTempHacha = model = glm::scale(model, glm::vec3(0.08f, 0.08f, 0.08f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		cajaHacha.Draw(lightingShader);
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        hacha.Draw(lightingShader);
+
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(17.0f, 0.15f, -22.0f));
+        model = glm::scale(model, glm::vec3(0.08f, 0.08f, 0.08f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        reja.Draw(lightingShader);
+
+        //lanzamiento de dados
+		glm::mat4 modelTempDado = glm::mat4(1.0f); //Temp
+		modelTempDado = model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(-17.0f, 0.0f, -22.0f));
+        model = glm::scale(model, glm::vec3(0.08f, 0.08f, 0.08f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		tarro.Draw(lightingShader);
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		dadosA.Draw(lightingShader);
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		dadosB.Draw(lightingShader);
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		dado1.Draw(lightingShader);
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		dado2.Draw(lightingShader);
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		dado3.Draw(lightingShader);
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		dado4.Draw(lightingShader);
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		dado5.Draw(lightingShader);
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		mesaDados.Draw(lightingShader);
 
 
         //bolos 
