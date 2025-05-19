@@ -29,6 +29,7 @@ void Animation();
 const GLuint WIDTH = 1950, HEIGHT = 1000;
 int SCREEN_WIDTH, SCREEN_HEIGHT;
 
+//Camara
 Camera  camera(glm::vec3(0.0f, 0.0f, 0.0f));
 GLfloat lastX = WIDTH / 2.0;
 GLfloat lastY = HEIGHT / 2.0;
@@ -36,19 +37,15 @@ bool keys[1024];
 bool firstMouse = true;
 glm::vec3 lightPos(0.0f, 0.0f, 0.0f);
 bool active;
-bool vistaTerceraPersona = true;
 bool camaraCambiada = false;
-
 enum TipoCamara {
     CAMARA_LIBRE,
     CAMARA_TERCERA_PERSONA,
     CAMARA_VISTA_AEREA,
-    CAMARA_FIJA_1,
+    CAMARA_JUEGO_TOPOS,
     CAMARA_FIJA_2,
 };
-
 TipoCamara tipoCamara = CAMARA_TERCERA_PERSONA;
-
 glm::vec3 dronePos = glm::vec3(0.0f, 60.0f, 0.0f);
 float droneSpeed = 5.0f;
 float droneDistance = 0.0f;
@@ -56,10 +53,7 @@ float maxArmLength = 50.0f;
 int droneDir = 0; 
 bool goingOut = true;
 
-
-bool AnimRick = false;
-int stepRick = 0;
-
+//Rick
 float rotateRickCabeza = 0.0f;
 bool rotateCabezaSentido = true;
 float rotateRickBrazos = 0.0f;
@@ -70,38 +64,34 @@ glm::vec3 translateRick = glm::vec3(0.0f, 0.0f, 45.0f) ;
 float rotateRick = 90.0f;
 bool caminando = false;
 
-// Variables globales para Topos
-float topoA = 0;
-
-glm::vec3 posicionesMesasViejas[] = {
-    glm::vec3(6.5f,  0.0f, -5.5f),
-    glm::vec3(6.5f,  0.0f, -0.5f),
-    glm::vec3(6.5f,  0.0f,  4.5f),
-    glm::vec3(-6.5f, 0.0f, -5.5f),
-    glm::vec3(-6.5f, 0.0f, -0.5f),
-    glm::vec3(-6.5f, 0.0f,  4.5f)
+struct Topo {
+    float altura = 0.0f;
+    float tiempo = 0.0f;
+    bool subiendo = true;
+    bool retrasoInicial = true;
 };
-glm::vec3 posicionesMesasNuevas[] = {
-    glm::vec3(6.5f,  2.0f, -5.5f),
-    glm::vec3(6.5f,  2.0f, -0.5f),
-    glm::vec3(6.5f,  2.0f,  4.5f),
-    glm::vec3(-6.5f, 2.0f, -5.5f),
-    glm::vec3(-6.5f, 2.0f, -0.5f),
-    glm::vec3(-6.5f, 2.0f,  4.5f)
-};
-glm::vec3 posicionesSillasViejasR[] = {
-    glm::vec3(9.0f, 0.0f, -3.5f),
-    glm::vec3(6.5f, 0.0f, -3.5f),
-    glm::vec3(4.0f, 0.0f, -3.5f),
+std::vector<Topo> topos(2);
 
-    glm::vec3(9.0f, 0.0f, 1.5f),
-    glm::vec3(6.5f, 0.0f, 1.5f),
-    glm::vec3(4.0f, 0.0f, 1.5f),
+bool juegoToposActivo = false;
+bool puedeTeclear = true;
+float tiempoAnimacion = 0.0f;
+float duracionAnimacion = 10.0f;
 
-    glm::vec3(9.0f, 0.0f, 6.5f),
-    glm::vec3(6.5f, 0.0f, 6.5f),
-    glm::vec3(4.0f, 0.0f, 6.5f)
-};
+
+float anguloMazoX = 0.0f;
+float anguloMazoY = 0.0f;
+glm::vec3 masoTranslate = glm::vec3(1.25f, 2.4f, -2.6f);
+bool bajando = true;               
+bool izquierda = true;              
+
+float velocidadGolpe = 180.0f;    
+float maxAnguloGolpe = 45.0f;   
+float minAnguloGolpe = 0.0f;
+
+float desplazamientoMaxX = 0.3f;
+float velocidadLateral = 0.5f;
+
+
 
 glm::vec3 pointLightPositions[] = {
    glm::vec3(0.0f,0.0f, 0.0f),
@@ -196,21 +186,19 @@ int main()
     Shader lightingShader("Shader/lighting.vs", "Shader/lighting.frag");
     Shader lampShader("Shader/lamp.vs", "Shader/lamp.frag");
     //modelos
-    //##################################################################################################################################
     Model Feria((char*)"Models/Feria.obj");
-<<<<<<< HEAD
     Model RickCuerpo((char*)"Models/RickCuerpo.obj");
     Model RickCabeza((char*)"Models/RickCabeza.obj");
     Model RickBrazoD((char*)"Models/RickBrazoD.obj");
     Model RickBrazoI((char*)"Models/RickBrazoI.obj");
     Model RickPiernaD((char*)"Models/RickPiernaD.obj");
     Model RickPiernaI((char*)"Models/RickPiernaI.obj");
-=======
     // Modelos Topos
     Model cajaTopos((char*)"Models/topos/cajaTopos.obj");
     Model toposA((char*)"Models/topos/toposA.obj");
     Model toposB((char*)"Models/topos/toposB.obj");
     Model mazo((char*)"Models/topos/mazo.obj");
+    Model mazo2((char*)"Models/topos/mazo2.obj");
 
     //Modelos Globos
     Model cajaGlobos((char*)"Models/globos/cajaGlobos.obj");
@@ -231,7 +219,6 @@ int main()
     Model bateo((char*)"Models/zona_bateo.obj");
     Model bate((char*)"Models/Bate.obj");
     Model pelota((char*)"Models/Pelota.obj");
->>>>>>> 56ff5722a880d51654f6e5643b8dc757369f91a5
 
     GLuint VBO, VAO;
     glGenVertexArrays(1, &VAO);
@@ -359,8 +346,12 @@ int main()
             camera.UpdateVectors();
         }
 
-
-
+        if (tipoCamara == CAMARA_JUEGO_TOPOS) {
+            camera.SetPosition(glm::vec3(-17.0f, 3.5f, 20.0f));
+            camera.SetYaw(90.0f);
+            camera.SetPitch(-15.0f);  
+            camera.UpdateVectors();
+        }
 
         glm::mat4 view;
         view = camera.GetViewMatrix();
@@ -374,11 +365,14 @@ int main()
 
         glm::mat4 model(1);
 
-<<<<<<< HEAD
+        //FERIA
+
         model = glm::mat4(1);
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         Feria.Draw(lightingShader);
         
+        //RICK
+
         model = glm::mat4(1);
         model = glm::translate(model, translateRick);
         model = glm::rotate(model, glm::radians(rotateRick), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -418,74 +412,54 @@ int main()
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelPiernaI));
         RickPiernaI.Draw(lightingShader);
 
-=======
-        //Carga de camara 
-        view = camera.GetViewMatrix();
-
+        //TOPOS
 
         model = glm::mat4(1);
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-        Feria.Draw(lightingShader);
-        //Cajon topos
-        glm::mat4 modelTempTopos = glm::mat4(1.0f); //Temp
-        glm::mat4 modelTempTopos2 = glm::mat4(1.0f); //Temp
-        glm::mat4 modelTempTopos3 = glm::mat4(1.0f); //Temp
-        model = glm::mat4(1);
-        modelTempTopos = model = glm::translate(model, glm::vec3(-17.0f, 0.0f, 24.0f));
-        modelTempTopos = model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-		modelTempTopos = model = glm::scale(modelTempTopos, glm::vec3(0.65f, 0.65f, 0.65f));
+        model = glm::translate(model, glm::vec3(-17.0f, 0.0f, 24.0f));
+        model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        model = glm::scale(model, glm::vec3(0.65f, 0.65f, 0.65f));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         cajaTopos.Draw(lightingShader);
-        // ToposA
-		model = modelTempTopos;
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-        toposA.Draw(lightingShader);
-        //ToposB
-        model = modelTempTopos;
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-        toposB.Draw(lightingShader);
-		//Mazo
-        model = modelTempTopos;
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-        mazo.Draw(lightingShader);
->>>>>>> 56ff5722a880d51654f6e5643b8dc757369f91a5
 
-        //Topos izquierda
-        // caja topos 2
-        modelTempTopos2 = glm::translate(modelTempTopos, glm::vec3(-7.5f, 0.0f, 0.0f));
-		model = modelTempTopos2;
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-        cajaTopos.Draw(lightingShader);
-        // ToposA Izquierda
-        model = modelTempTopos2;
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        glm::mat4 modelTopoA = model;
+        modelTopoA = glm::translate(modelTopoA, glm::vec3(0.0f, topos[0].altura, 0.0f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelTopoA));
         toposA.Draw(lightingShader);
-		//ToposB Izquierda
-        model = modelTempTopos2;
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+
+        glm::mat4 modelTopoB = model;
+        modelTopoB = glm::translate(modelTopoB, glm::vec3(0.0f, topos[1].altura, 0.0f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelTopoB));
         toposB.Draw(lightingShader);
-		//Mazo Izquierda
-        model = modelTempTopos2;
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+         
+        glm::mat4 modelMazo = model;
+        modelMazo = glm::translate(modelMazo, masoTranslate);
+        modelMazo = glm::rotate(modelMazo, glm::radians(anguloMazoY), glm::vec3(0.0f, 1.0f, 0.0f));
+        //modelMazo = glm::rotate(modelMazo, glm::radians(anguloMazoX), glm::vec3(1.0f, 0.0f, 0.0f));
+
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelMazo));
+        mazo2.Draw(lightingShader);
+
+  
+        glm::mat4 model2 = model;
+        model2 = glm::translate(model2, glm::vec3(-7.5f, 0.0f, 0.0f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model2));
+        cajaTopos.Draw(lightingShader);
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model2));
+        toposA.Draw(lightingShader);
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model2));
+        toposB.Draw(lightingShader);
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model2));
         mazo.Draw(lightingShader);
 
-        //Topos derecha
-        // caja topos 3
-        modelTempTopos3 = glm::translate(modelTempTopos, glm::vec3(7.5f, 0.0f, 0.0f));
-        model = modelTempTopos3;
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        glm::mat4 model3 = model;
+        model3 = glm::translate(model3, glm::vec3(7.5f, 0.0f, 0.0f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model3));
         cajaTopos.Draw(lightingShader);
-        // ToposA Izquierda
-        model = modelTempTopos3;
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model3));
         toposA.Draw(lightingShader);
-        //ToposB Izquierda
-        model = modelTempTopos3;
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model3));
         toposB.Draw(lightingShader);
-        //Mazo Izquierda
-        model = modelTempTopos3;
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model3));
         mazo.Draw(lightingShader);
 
 		//Cajon globos
@@ -590,50 +564,50 @@ int main()
         glm::mat4 modelTempBolos2 = glm::mat4(1.0f); //Temp
         glm::mat4 modelTempBolos3 = glm::mat4(1.0f); //Temp
         model = glm::mat4(1.0f);
-        modelTempBolos = model = glm::translate(model, glm::vec3(35.0f, 0.1f, 0.0f)); // Ajusta posición según tu escena
+        modelTempBolos = model = glm::translate(model, glm::vec3(35.0f, 0.1f, 0.0f)); // Ajusta posiciï¿½n segï¿½n tu escena
         modelTempBolos = model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, -1.0f, 0.0f));
         modelTempBolos = model = glm::scale(model, glm::vec3(0.35f, 0.24f, 0.40f)); // Escala si es necesario
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         boliche.Draw(lightingShader);
         //caparazones
         model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(32.0f, 0.1f, 0.2f)); // Ajusta posición
+        model = glm::translate(model, glm::vec3(32.0f, 0.1f, 0.2f)); // Ajusta posiciï¿½n
         model = glm::scale(model, glm::vec3(0.2f)); // Escala si es muy grande
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         caparazon.Draw(lightingShader);
         //2
         model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(32.0f, 0.1f, 1.8f)); // Ajusta posición
+        model = glm::translate(model, glm::vec3(32.0f, 0.1f, 1.8f)); // Ajusta posiciï¿½n
         model = glm::scale(model, glm::vec3(0.2f)); // Escala si es muy grande
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         caparazon.Draw(lightingShader);
         //3
         model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(32.0f, 0.1f, 3.4f)); // Ajusta posición
+        model = glm::translate(model, glm::vec3(32.0f, 0.1f, 3.4f)); // Ajusta posiciï¿½n
         model = glm::scale(model, glm::vec3(0.2f)); // Escala si es muy grande
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         caparazon.Draw(lightingShader);
         //4
         model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(32.0f, 0.1f, 5.0f)); // Ajusta posición
+        model = glm::translate(model, glm::vec3(32.0f, 0.1f, 5.0f)); // Ajusta posiciï¿½n
         model = glm::scale(model, glm::vec3(0.2f)); // Escala si es muy grande
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         caparazon.Draw(lightingShader);
         //5
         model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(32.0f, 0.1f, -1.4f)); // Ajusta posición
+        model = glm::translate(model, glm::vec3(32.0f, 0.1f, -1.4f)); // Ajusta posiciï¿½n
         model = glm::scale(model, glm::vec3(0.2f)); // Escala si es muy grande
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         caparazon.Draw(lightingShader);
         //6
         model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(32.0f, 0.1f, -3.0f)); // Ajusta posición
+        model = glm::translate(model, glm::vec3(32.0f, 0.1f, -3.0f)); // Ajusta posiciï¿½n
         model = glm::scale(model, glm::vec3(0.2f)); // Escala si es muy grande
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         caparazon.Draw(lightingShader);
         //7
         model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(32.0f, 0.1f, -4.6f)); // Ajusta posición
+        model = glm::translate(model, glm::vec3(32.0f, 0.1f, -4.6f)); // Ajusta posiciï¿½n
         model = glm::scale(model, glm::vec3(0.2f)); // Escala si es muy grande
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         caparazon.Draw(lightingShader);
@@ -655,7 +629,7 @@ int main()
             glm::vec3(31.05f, 0.5f, -5.3f)
         };
 
-        // Dibuja los pinos con rotación de 90° en eje Y para que apunten al origen
+        // Dibuja los pinos con rotaciï¿½n de 90ï¿½ en eje Y para que apunten al origen
         for (const auto& posicion : posicionesPinos) {
             model = glm::mat4(1.0f);
             model = glm::translate(model, posicion);
@@ -671,7 +645,7 @@ int main()
         glm::mat4 modelTempBateo2 = glm::mat4(1.0f); //Temp
         glm::mat4 modelTempBateo3 = glm::mat4(1.0f); //Temp
         model = glm::mat4(1.0f);
-        modelTempBateo = model = glm::translate(model, glm::vec3(-35.0f, 0.1f, 0.0f)); // Ajusta posición según tu escena
+        modelTempBateo = model = glm::translate(model, glm::vec3(-35.0f, 0.1f, 0.0f)); // Ajusta posiciï¿½n segï¿½n tu escena
         modelTempBateo = model = model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, -1.0f, 0.0f));
         modelTempBateo = model = glm::scale(model, glm::vec3(0.35f, 0.24f, 0.40f)); // Escala si es necesario
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
@@ -701,7 +675,8 @@ int main()
 
 void DoMovement()
 {
-    
+    if (!puedeTeclear) return;
+
     if (tipoCamara == CAMARA_LIBRE) {
         if (keys[GLFW_KEY_W]) camera.ProcessKeyboard(FORWARD, deltaTime);
         if (keys[GLFW_KEY_S]) camera.ProcessKeyboard(BACKWARD, deltaTime);
@@ -715,32 +690,36 @@ void DoMovement()
 
         if (keys[GLFW_KEY_UP])
         {
-            translateRick.z += sin(glm::radians(-rotateRick)) * 0.02f;
-            translateRick.x += cos(glm::radians(-rotateRick)) * 0.02f;
+            translateRick.z += sin(glm::radians(-rotateRick)) * 0.08f;
+            translateRick.x += cos(glm::radians(-rotateRick)) * 0.08f;
             caminando = true;
         }
 
         if (keys[GLFW_KEY_DOWN])
         {
-            translateRick.z -= sin(glm::radians(-rotateRick)) * 0.02f;
-            translateRick.x -= cos(glm::radians(-rotateRick)) * 0.02f;
+            translateRick.z -= sin(glm::radians(-rotateRick)) * 0.08f;
+            translateRick.x -= cos(glm::radians(-rotateRick)) * 0.08f;
             caminando = true;
         }
 
         if (keys[GLFW_KEY_LEFT])
         {
-            rotateRick += 0.5f;
+            rotateRick += 0.8f;
         }
 
         if (keys[GLFW_KEY_RIGHT])
         {
-            rotateRick -= 0.5f;
+            rotateRick -= 0.8f;
         }
     }
+
 }
 
 void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
+
+    if (!puedeTeclear) return;
+
     if (GLFW_KEY_ESCAPE == key && GLFW_PRESS == action)
     {
         glfwSetWindowShouldClose(window, GL_TRUE);
@@ -769,40 +748,46 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
         camaraCambiada = false;
     }
 
+    if (key == GLFW_KEY_1) {
+        juegoToposActivo = true;
+        puedeTeclear = false;
+        tiempoAnimacion = 0.0f;
+        //tipoCamara = CAMARA_JUEGO_TOPOS;
+    }
 
 }
 
 void Animation() {
 
     if (rotateCabezaSentido) {
-        rotateRickCabeza += 0.1f;
+        rotateRickCabeza += 0.4f;
         if (rotateRickCabeza >= 20.0f)
             rotateCabezaSentido = false;
     }
     else {
-        rotateRickCabeza -= 0.1f;
+        rotateRickCabeza -= 0.4f;
         if (rotateRickCabeza <= -20.0f)
             rotateCabezaSentido = true;
     }
 
     if (caminando) {
         if (rotateRickPiernasSentido) {
-            rotateRickPiernas += 0.5f;
+            rotateRickPiernas += 1.0f;
             if (rotateRickPiernas >= 25.0f)
                 rotateRickPiernasSentido = false;
         }
         else {
-            rotateRickPiernas -= 0.5f;
+            rotateRickPiernas -= 1.0f;
             if (rotateRickPiernas <= -25.0f)
                 rotateRickPiernasSentido = true;
         }
         if (rotateRickBrazosSentido) {
-            rotateRickBrazos += 0.9f;
+            rotateRickBrazos += 1.5f;
             if (rotateRickBrazos >= 70.0f)
                 rotateRickBrazosSentido = false;
         }
         else {
-            rotateRickBrazos -= 0.9f;
+            rotateRickBrazos -= 1.5f;
             if (rotateRickBrazos <= -70.0f)
                 rotateRickBrazosSentido = true;
         }
@@ -823,10 +808,104 @@ void Animation() {
             rotateRickBrazos = 0.0f;
     }
 
+
+    if (juegoToposActivo) {
+
+        float velocidad = 2.5f;
+        tiempoAnimacion += deltaTime;
+        anguloMazoY = 80.0f;
+        masoTranslate.y = -0.5f;
+
+        if (bajando) {
+            anguloMazoX += velocidadGolpe * deltaTime;
+            if (anguloMazoX >= maxAnguloGolpe) {
+                anguloMazoX = maxAnguloGolpe;
+                bajando = false;
+            }
+        }
+        else {
+            anguloMazoX -= velocidadGolpe * deltaTime;
+            if (anguloMazoX <= minAnguloGolpe) {
+                anguloMazoX = minAnguloGolpe;
+                bajando = true;
+            }
+        }
+
+        if (izquierda) {
+            masoTranslate.x -= velocidadLateral * deltaTime;
+            if (masoTranslate.x <= -desplazamientoMaxX) {
+                masoTranslate.x = -desplazamientoMaxX;
+                izquierda = false;
+            }
+        }
+        else {
+            masoTranslate.x += velocidadLateral * deltaTime;
+            if (masoTranslate.x >= desplazamientoMaxX) {
+                masoTranslate.x = desplazamientoMaxX;
+                izquierda = true;
+            }
+        }
+
+        for(int i = 0; i < topos.size(); ++i) {
+            Topo& topo = topos[i];
+            topo.tiempo += deltaTime;
+
+            if (i == 1 && topo.retrasoInicial) {
+                if (topo.tiempo < 0.4f) {
+                    continue;
+                }
+                else {
+                    topo.retrasoInicial = false; 
+                    topo.tiempo = 0.0f;  
+                }
+            }
+
+            if (topo.subiendo) {
+                if (topo.tiempo < 0.5f) {
+                    continue;  
+                }
+
+                topo.altura += velocidad * deltaTime;
+                if (topo.altura >= 0.0f) {
+                    topo.altura = 0.0f;
+                    topo.tiempo = 0.0f;
+                    topo.subiendo = false;
+                }
+            }
+            else {
+                if (topo.tiempo < 0.5f) {
+                    continue;
+                }
+                topo.altura -= velocidad * deltaTime;
+                if (topo.altura <= -0.5f) {
+                    topo.altura = -0.5f; 
+                    topo.tiempo = 0.0f;
+                    topo.subiendo = true;  
+                }
+            }
+        }
+
+        if (tiempoAnimacion >= duracionAnimacion) {
+            juegoToposActivo = false;
+            puedeTeclear = true;
+            anguloMazoX = 0.0f;
+            anguloMazoY = 0.0f;
+            masoTranslate = glm::vec3(1.25f, 2.4f, -2.6f);
+            topos[0].altura = 0.0f; ;
+            topos[1].altura = 0.0f; ;
+            tipoCamara = CAMARA_TERCERA_PERSONA;
+            camera.SetYaw(0.0f);
+            camera.SetPitch(0.0f);
+            camera.UpdateVectors();
+        }
+    }
+
 }
 
 void MouseCallback(GLFWwindow* window, double xPos, double yPos)
 {
+
+    if (!puedeTeclear) return;
 
     if (tipoCamara == CAMARA_LIBRE) {
         if (firstMouse)
