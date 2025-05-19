@@ -144,18 +144,14 @@ float vertices[] = {
       -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
 };
 
-
-
 glm::vec3 Light1 = glm::vec3(0);
-
 
 GLfloat deltaTime = 0.0f;	
 GLfloat lastFrame = 0.0f;  
 
-//Variables animacion bolos
 bool lanzarCaparazon = false;
-float posCaparazonX = 32.0f;  // posici�n inicial
-float objetivoX = 37.6f;      // hasta donde est�n los pinos valor original 37.1
+float posCaparazonX = 32.0f;  
+float objetivoX = 37.6f;     
 float velocidadCaparazon = 0.02f;
 float impactoRotacion = 0.0f;
 bool pinosCaidos = false;
@@ -198,17 +194,16 @@ int main()
 
     Shader lightingShader("Shader/lighting.vs", "Shader/lighting.frag");
     Shader lampShader("Shader/lamp.vs", "Shader/lamp.frag");
-    //modelos
+
     Model Feria((char*)"Models/Feria.obj");
-//<<<<<<< HEAD
     Model RickCuerpo((char*)"Models/RickCuerpo.obj");
     Model RickCabeza((char*)"Models/RickCabeza.obj");
     Model RickBrazoD((char*)"Models/RickBrazoD.obj");
     Model RickBrazoI((char*)"Models/RickBrazoI.obj");
     Model RickPiernaD((char*)"Models/RickPiernaD.obj");
     Model RickPiernaI((char*)"Models/RickPiernaI.obj");
-//=======
-    // Modelos Topos
+    
+    //Modelos Topos
     Model cajaTopos((char*)"Models/topos/cajaTopos.obj");
     Model toposA((char*)"Models/topos/toposA.obj");
     Model toposB((char*)"Models/topos/toposB.obj");
@@ -224,12 +219,12 @@ int main()
 	Model globo2((char*)"Models/globos/globo2.obj");
 	Model globo3((char*)"Models/globos/globo3.obj");
 
-    //Modelos hacha
+    //Modelos Hacha
     Model cajaHacha((char*)"Models/hacha/cajaHacha.obj");
     Model hacha((char*)"Models/hacha/hacha.obj");
 	Model reja((char*)"Models/hacha/reja.obj");
 
-    //Modelos dados
+    //Modelos Dados
 	Model tarro((char*)"Models/dados/tarro.obj");
 	Model dado1((char*)"Models/dados/dado1.obj");
 	Model dado2((char*)"Models/dados/dado2.obj");
@@ -241,16 +236,15 @@ int main()
 	Model mesaDados((char*)"Models/dados/mesaDados.obj");
 
 
-    //modelos boliche 
+    //Modelos Boliche 
     Model boliche((char*)"Models/boliche.obj");
     Model caparazon((char*)"Models/caparazon.obj");
     Model pino((char*)"Models/pino.obj");
 
-    //Modelos zona de bateo
+    //Modelos Bateo
     Model bateo((char*)"Models/zona_bateo.obj");
     Model bate((char*)"Models/Bate.obj");
     Model pelota((char*)"Models/Pelota.obj");
-//>>>>>>> 56ff5722a880d51654f6e5643b8dc757369f91a5
 
     GLuint VBO, VAO;
     glGenVertexArrays(1, &VAO);
@@ -399,13 +393,12 @@ int main()
 
         //FERIA
 
-//<<<<<<< HEAD
         model = glm::mat4(1);
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         Feria.Draw(lightingShader);
         
         //RICK
-
+        
         model = glm::mat4(1);
         model = glm::translate(model, translateRick);
         model = glm::rotate(model, glm::radians(rotateRick), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -446,10 +439,6 @@ int main()
         RickPiernaI.Draw(lightingShader);
 
         //TOPOS
-//=======
-        //Carga de camara 
-        view = camera.GetViewMatrix();
-
 
         model = glm::mat4(1);
         model = glm::translate(model, glm::vec3(-17.0f, 0.0f, 24.0f));
@@ -457,19 +446,6 @@ int main()
         model = glm::scale(model, glm::vec3(0.65f, 0.65f, 0.65f));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         cajaTopos.Draw(lightingShader);
-        // ToposA
-		model = modelTempTopos;
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-        toposA.Draw(lightingShader);
-        //ToposB
-        model = modelTempTopos;
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-        toposB.Draw(lightingShader);
-		//Mazo
-        model = modelTempTopos;
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-        mazo.Draw(lightingShader);
-//>>>>>>> 56ff5722a880d51654f6e5643b8dc757369f91a5
 
         glm::mat4 modelTopoA = model;
         modelTopoA = glm::translate(modelTopoA, glm::vec3(0.0f, topos[0].altura, 0.0f));
@@ -922,7 +898,7 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
         tiempoAnimacion = 0.0f;
         //tipoCamara = CAMARA_JUEGO_TOPOS;
     }
-    //animacion bolos
+    
     if (key == GLFW_KEY_B && action == GLFW_PRESS) {
         lanzarCaparazon = true;
         posCaparazonX = 32.0f;
@@ -1106,7 +1082,3 @@ void ResetMousePosition(GLFWwindow* window) {
     camera.SetPitch(0.0f);
     camera.UpdateVectors();
 }
-
-
-
-//lineas de busqueda
