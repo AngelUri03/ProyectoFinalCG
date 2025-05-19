@@ -152,11 +152,39 @@ GLfloat lastFrame = 0.0f;
 bool lanzarCaparazon = false;
 float posCaparazonX = 32.0f;  
 float objetivoX = 37.6f;     
+//variables animacion insercion de moneda
+bool animacionBrazoRick = false;
+bool animacionCompletaBrazo = false;
+float anguloBrazoRick = 0.0f;
+bool brazoSubiendo = true;
+
+
+//Variables animacion bolos
+bool lanzarCaparazon = false;
+float posCaparazonX = 32.0f;  // posici�n inicial cap
+float objetivoX = 37.1f;      // hasta donde est�n los pinos valor original 37.1
 float velocidadCaparazon = 0.02f;
 float impactoRotacion = 0.0f;
 bool pinosCaidos = false;
 float rotacionPinoCentral = 0.0f;
 float rotacionPinoAnimado = 0.0f;
+float pinoPosY = 0.5f;  // Altura inicial del pino
+
+//variables animacion bateo
+bool animarPelota = false;
+float posPelotaX = -31.5f;  // posici�n inicial X
+float posPelotaY = 1.3f;
+float posPelotaZ = -0.0f;    // centro del carril
+float velocidadPelota = 0.1f;
+bool pelotaGolpeada = false;
+float velocidadGolpe = 0.25f;
+float rotacionBate = -30.0f;
+bool animarBate = false;
+bool bateGolpeo = false;
+bool pelotaRegresando = false;
+
+
+
 
 
 
@@ -416,7 +444,12 @@ int main()
 
         glm::mat4 modelBrazoD = model;
         modelBrazoD = glm::translate(modelBrazoD, glm::vec3(-0.1f, 1.34f, 0.58f)); 
-        modelBrazoD = glm::rotate(modelBrazoD, glm::radians(rotateRickBrazos), glm::vec3(0.0f, 1.0f, 0.0f));
+        if (animacionBrazoRick || animacionCompletaBrazo) {
+            modelBrazoD = glm::rotate(modelBrazoD, glm::radians(anguloBrazoRick), glm::vec3(1.0f, 0.0f, 0.0f));
+        }
+        else {
+            modelBrazoD = glm::rotate(modelBrazoD, glm::radians(rotateRickBrazos), glm::vec3(0.0f, 1.0f, 0.0f));
+        }
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelBrazoD));
         RickBrazoD.Draw(lightingShader);
 
@@ -636,14 +669,22 @@ int main()
         boliche.Draw(lightingShader);
 
         //animacion caparazon
-        if (lanzarCaparazon && posCaparazonX < objetivoX) {
+        if (animacionCompletaBrazo && !lanzarCaparazon) {
+            lanzarCaparazon = true;
+        }
+        if (lanzarCaparazon && posCaparazonX < 39.0f) {  // <- aumentamos el l�mite para que avance m�s
             posCaparazonX += velocidadCaparazon;
             impactoRotacion += 4.0f;
+
+            // Activa la ca�da al llegar a los pinos, pero no detiene el caparaz�n
+            if (!pinosCaidos && posCaparazonX >= 36.8f) {
+                pinosCaidos = true;
+            }
         }
         else if (lanzarCaparazon) {
             lanzarCaparazon = false;
-            pinosCaidos = true;  // Simula que los pinos cayeron
         }
+
         //caparazones
         model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(posCaparazonX, 0.1f, 0.2f)); // solo se mueve en X
@@ -712,14 +753,91 @@ int main()
         // Si se ha activado la animaci�n de ca�da
         if (pinosCaidos && rotacionPinoAnimado < 90.0f) {
             rotacionPinoAnimado += 2.0f; // Velocidad de ca�da
+            pinoPosY -= 0.01f; // Baja ligeramente el pino
+            if (pinoPosY < 0.2f) pinoPosY = 0.2f; // No baja m�s del suelo
+            animacionCompletaBrazo = false;
         }
-
+        // Pino 1 (central)
         model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(37.1f, 0.5f, 0.2f)); // posici�n fija del pino central
+        model = glm::translate(model, glm::vec3(37.1f, 0.0f, 0.2f)); // posici�n fija del pino central
+        model = glm::translate(model, glm::vec3(0.0f, pinoPosY, 0.0f));
         model = glm::rotate(model, glm::radians(0.0f - rotacionPinoAnimado), glm::vec3(0.0f, 0.0f, 1.0f)); // cae hacia el eje Z
         model = glm::scale(model, glm::vec3(0.08f));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         pino.Draw(lightingShader);
+        // Pino 2
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(37.25f, 0.0f, 0.4f));
+        model = glm::translate(model, glm::vec3(0.0f, pinoPosY, 0.0f));
+        model = glm::rotate(model, glm::radians(-rotacionPinoAnimado), glm::vec3(0.0f, 0.5f, 1.0f));
+        model = glm::scale(model, glm::vec3(0.08f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        pino.Draw(lightingShader);
+        // Pino 3
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(37.25f, 0.0f, 0.0f));
+        model = glm::translate(model, glm::vec3(0.0f, pinoPosY, 0.0f));
+        model = glm::rotate(model, glm::radians(-rotacionPinoAnimado), glm::vec3(0.0f, -0.5f, 1.0f));
+        model = glm::scale(model, glm::vec3(0.08f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        pino.Draw(lightingShader);
+        // Pino 4
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(37.4f, 0.0f, 0.5f));
+        model = glm::translate(model, glm::vec3(0.0f, pinoPosY, 0.0f));
+        model = glm::rotate(model, glm::radians(-rotacionPinoAnimado), glm::vec3(0.0f, 0.0f, 1.0f));
+        model = glm::scale(model, glm::vec3(0.08f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        pino.Draw(lightingShader);
+        // Pino 5
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(37.4f, 0.0f, -0.1f));
+        model = glm::translate(model, glm::vec3(0.0f, pinoPosY, 0.0f));
+        model = glm::rotate(model, glm::radians(-rotacionPinoAnimado), glm::vec3(0.0f, 0.0f, 1.0f));
+        model = glm::scale(model, glm::vec3(0.08f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        pino.Draw(lightingShader);
+        // Pino 6
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(37.4f, 0.0f, 0.2f));
+        model = glm::translate(model, glm::vec3(0.0f, pinoPosY, 0.0f));
+        model = glm::rotate(model, glm::radians(-rotacionPinoAnimado), glm::vec3(0.0f, 0.0f, 1.0f));
+        model = glm::scale(model, glm::vec3(0.08f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        pino.Draw(lightingShader);
+        // Pino 7
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(37.55f, 0.0f, 0.7f));
+        model = glm::translate(model, glm::vec3(0.0f, pinoPosY, 0.0f));
+        model = glm::rotate(model, glm::radians(-rotacionPinoAnimado), glm::vec3(0.0f, 0.5f, 1.0f));
+        model = glm::scale(model, glm::vec3(0.08f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        pino.Draw(lightingShader);
+        // Pino 8
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(37.55f, 0.0f, 0.4f));
+        model = glm::translate(model, glm::vec3(0.0f, pinoPosY, 0.0f));
+        model = glm::rotate(model, glm::radians(-rotacionPinoAnimado), glm::vec3(0.0f, -0.5f, 1.0f));
+        model = glm::scale(model, glm::vec3(0.08f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        pino.Draw(lightingShader);
+        // Pino 9
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(37.55f, 0.0f, -0.0f));
+        model = glm::translate(model, glm::vec3(0.0f, pinoPosY, 0.0f));
+        model = glm::rotate(model, glm::radians(-rotacionPinoAnimado), glm::vec3(0.0f, 0.5f, 1.0f));
+        model = glm::scale(model, glm::vec3(0.08f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        pino.Draw(lightingShader);
+        // Pino 10
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(37.55f, 0.0f, -0.3f));
+        model = glm::translate(model, glm::vec3(0.0f, pinoPosY, 0.0f));
+        model = glm::rotate(model, glm::radians(-rotacionPinoAnimado), glm::vec3(0.0f, -0.5f, 1.0f));
+        model = glm::scale(model, glm::vec3(0.08f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        pino.Draw(lightingShader);
+
 
 
         // Dibuja los 7 tri�ngulos de pinos
@@ -751,19 +869,6 @@ int main()
         modelTempBateo = model = glm::scale(model, glm::vec3(0.35f, 0.24f, 0.40f)); // Escala si es necesario
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         bateo.Draw(lightingShader);
-        //Pelota
-        model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(-31.5f, 0.3f, 0.0f)); // Ajusta posici�n
-        model = glm::scale(model, glm::vec3(0.06f)); // Escala si es muy grande
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-        pelota.Draw(lightingShader);
-        //Bate
-        model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(-31.0f, 0.3f, 0.0f)); // Ajusta posici�n
-        modelTempBateo = model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, -1.0f, 0.0f));
-        model = glm::scale(model, glm::vec3(0.06f)); // Escala si es muy grande
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-        bate.Draw(lightingShader);
         //Pelota2 izq
         model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(-31.5f, 0.3f, 4.3f)); // Ajusta posici�n
@@ -789,7 +894,69 @@ int main()
         modelTempBateo = model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, -1.0f, 0.0f));
         model = glm::scale(model, glm::vec3(0.06f)); // Escala si es muy grande
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        bate.Draw(lightingShader); 
+
+        // Animaci�n de pelota bateo
+        if (animarPelota && !pelotaGolpeada) {
+            // Movimiento hacia adelante (del fondo a la zona de bateo)
+            posPelotaX += velocidadPelota;
+            posPelotaY = 1.3f;
+
+            if (posPelotaX >= -31.5f) { // Punto donde la pelota "recibe" el golpe
+                pelotaGolpeada = true;
+                animarBate = true;
+            }
+        }
+        else if (animarPelota && pelotaGolpeada && !pelotaRegresando) {
+            // Movimiento hacia arriba y adelante (simulando el rebote)
+            posPelotaZ += velocidadGolpe;
+           
+
+            if (posPelotaZ >= -1.6f) {
+                pelotaRegresando = true;  // Inicia retorno
+            }
+        }
+        // Animaci�n del bate (una vez que se activa)
+        if (animarBate) {
+            rotacionBate += 6.0f;  // Velocidad de golpe
+            if (rotacionBate >= 30.0f) {
+                animarBate = false;  // Detener rotaci�n
+            }
+        }
+        else if (animarPelota && pelotaRegresando) {
+            // Vuelve a la red
+            posPelotaX -= velocidadPelota;
+            posPelotaY += 0.02f;
+
+            if (posPelotaX <= -37.9f) {
+                animarPelota = false;  // Fin de animaci�n
+                pelotaGolpeada = false;
+                pelotaRegresando = false;
+                posPelotaX = -37.9f;
+                
+            }
+        }
+        else if (rotacionBate > -30.0f) {
+            rotacionBate -= 3.0f;  // Vuelve a posici�n original lentamente
+            if (rotacionBate < -30.0f) rotacionBate = -30.0f;
+        }
+        //Pelota
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(posPelotaX, posPelotaY, posPelotaZ));
+        model = glm::scale(model, glm::vec3(0.06f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        pelota.Draw(lightingShader);
+        //Bate
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(-31.0f, 1.3f, 0.7f));
+        // Primero aplica la orientaci�n base
+        model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+        // Luego el giro animado lateral en Y (como si golpeara la pelota)
+        model = glm::rotate(model, glm::radians(rotacionBate), glm::vec3(0.0f, 1.0f, 0.0f));
+        model = glm::scale(model, glm::vec3(0.06f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         bate.Draw(lightingShader);
+
 
 
 
@@ -833,7 +1000,7 @@ void DoMovement()
         if (keys[GLFW_KEY_UP])
         {
             /*translateRick.z += sin(glm::radians(-rotateRick)) * 0.02f;
-            translateRick.x += cos(glm::radians(-rotateRick)) * 0.02f;*/
+            translateRick.x += cos(glm::radians(-rotateRick)) * 0.02f;*/ //velocidad de rick original
             translateRick.z += sin(glm::radians(-rotateRick)) * 0.07f;
             translateRick.x += cos(glm::radians(-rotateRick)) * 0.07f;
             caminando = true;
@@ -899,12 +1066,41 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
         //tipoCamara = CAMARA_JUEGO_TOPOS;
     }
     
-    if (key == GLFW_KEY_B && action == GLFW_PRESS) {
+    //animacion bolos
+    if (key == GLFW_KEY_5) {
+        // Inicia animaci�n del brazo
+        animacionBrazoRick = true;
+        animacionCompletaBrazo = false;
+        anguloBrazoRick = 0.0f;
+        brazoSubiendo = true;
+        // Animacion de caparazon
         lanzarCaparazon = true;
         posCaparazonX = 32.0f;
         impactoRotacion = 0.0f;
+        rotacionPinoAnimado = 0.0f;
+        pinoPosY = 0.5f;
         pinosCaidos = false;
     }
+
+    //animacion bateo
+    if (key == GLFW_KEY_6) {
+        // Inicia animaci�n del brazo
+        animacionBrazoRick = true;
+        animacionCompletaBrazo = false;
+        anguloBrazoRick = 0.0f;
+        brazoSubiendo = true;
+        //animacion de pelota y bate
+        animarPelota = true;
+        pelotaGolpeada = false;
+        pelotaRegresando = false;
+        posPelotaX = -37.1f;
+        posPelotaZ = 0.0f;
+        posPelotaY = 0.3f;
+        rotacionBate = 0.0f;
+        animarBate = false;
+        bateGolpeo = false;
+    }
+
 
 
 }
@@ -959,6 +1155,23 @@ void Animation() {
         else
             rotateRickBrazos = 0.0f;
     }
+    if (animacionBrazoRick) {
+        if (brazoSubiendo) {
+            anguloBrazoRick += 1.5f;
+            if (anguloBrazoRick >= 45.0f) {
+                brazoSubiendo = false;
+            }
+        }
+        else {
+            anguloBrazoRick -= 1.5f;
+            if (anguloBrazoRick <= 0.0f) {
+                anguloBrazoRick = 0.0f;
+                animacionBrazoRick = false;
+                animacionCompletaBrazo = true;  // Marca que ya se complet�
+            }
+        }
+    }
+
 
 
     if (juegoToposActivo) {
