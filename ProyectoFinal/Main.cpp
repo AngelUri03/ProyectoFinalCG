@@ -327,7 +327,7 @@ int main()
 
     //Modelos Hacha
     Model cajaHacha((char*)"Models/hacha/cajaHacha.obj");
-    Model hacha((char*)"Models/hacha/hacha.obj");
+    Model hacha((char*)"Models/hacha/hachaAnim.obj");
     Model reja((char*)"Models/hacha/reja.obj");
 
     //Modelos Dados
@@ -812,12 +812,16 @@ int main()
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         cajaHacha.Draw(lightingShader);
 
-        //glm::mat4 modelHacha = modelTempHacha; // usa el modelo base que ya tienes
-        //modelHacha = glm::translate(modelHacha, glm::vec3(0.0f, 1.0f, 0.0f)); // ajusta al centro de giro
-        //modelHacha = glm::rotate(modelHacha, glm::radians(rotacionHacha), glm::vec3(1.0f, 0.0f, 0.0f)); // gira en eje X
-        //modelHacha = glm::translate(modelHacha, glm::vec3(0.0f, -1.0f, 0.0f)); // regresa
-        //glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelHacha));
-        //hacha.Draw(lightingShader);
+        //dibujo de hacha animada
+        modelTempHacha = glm::translate(glm::mat4(1.0f), glm::vec3(17.0f, 3.0f, -22.0f));
+        modelTempHacha = glm::scale(modelTempHacha, glm::vec3(0.08f)); // escala como siempre
+        glm::mat4 modelHacha = modelTempHacha;
+        modelHacha = glm::translate(modelHacha, glm::vec3(0.0f, 0.5f, 0.0f));  // punto de pivote, ajusta si rota raro
+        modelHacha = glm::rotate(modelHacha, glm::radians(rotacionHacha), glm::vec3(1.0f, 0.0f, 0.0f)); // eje X: cae hacia caja
+        modelHacha = glm::translate(modelHacha, glm::vec3(0.0f, -0.5f, 0.0f)); // deshace el pivote
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelHacha));
+        hacha.Draw(lightingShader);
+
 
 
         model = glm::mat4(1.0f);
