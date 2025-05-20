@@ -284,6 +284,7 @@ int main()
     Shader skyboxshader("Shader/SkyBox.vs", "Shader/SkyBox.frag");
 
     Model Feria((char*)"Models/Feria.obj");
+    Model Finn((char*)"Models/texturas_finn/finn.obj");
     Model RickCuerpo((char*)"Models/RickCuerpo.obj");
     Model RickCabeza((char*)"Models/RickCabeza.obj");
     Model RickBrazoD((char*)"Models/RickBrazoD.obj");
@@ -570,6 +571,14 @@ int main()
         modelPiernaI = glm::rotate(modelPiernaI, glm::radians(rotateRickPiernas), glm::vec3(0.0f, 0.0f, 1.0f));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelPiernaI));
         RickPiernaI.Draw(lightingShader);
+
+        //NPC
+
+        model = glm::mat4(1);
+        model = glm::translate(model, glm::vec3(10.0f, 0.5f, 10.0f));
+        model = glm::scale(model, glm::vec3(0.15f, 0.15f, 0.15f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        Finn.Draw(lightingShader);
 
         //TOPOS
 
@@ -1017,27 +1026,32 @@ void DoMovement()
 
         if (keys[GLFW_KEY_UP])
         {
-            translateRick.z += sin(glm::radians(-rotateRick)) * 0.07f;
-            translateRick.x += cos(glm::radians(-rotateRick)) * 0.07f;
-            caminando = true;
-            std::cout << "Posición Rick: ("
-                << translateRick.x << ", "
-                << translateRick.y << ", "
-                << translateRick.z << ") - Rotación Y: "
-                << rotateRick << "°" << std::endl;
+            float deltaZ = sin(glm::radians(-rotateRick)) * 0.07f;
+            float deltaX = cos(glm::radians(-rotateRick)) * 0.07f;
+
+            if (translateRick.z + deltaZ <= 50.0f && translateRick.z + deltaZ >= -50.0f &&
+                translateRick.x + deltaX <= 50.0f && translateRick.x + deltaX >= -50.0f)
+            {
+                translateRick.z += deltaZ;
+                translateRick.x += deltaX;
+                caminando = true;
+            }
         }
 
         if (keys[GLFW_KEY_DOWN])
         {
-            translateRick.z -= sin(glm::radians(-rotateRick)) * 0.08f;
-            translateRick.x -= cos(glm::radians(-rotateRick)) * 0.08f;
-            caminando = true;
-            std::cout << "Posición Rick: ("
-                << translateRick.x << ", "
-                << translateRick.y << ", "
-                << translateRick.z << ") - Rotación Y: "
-                << rotateRick << "°" << std::endl;
+            float deltaZ = -sin(glm::radians(-rotateRick)) * 0.08f;
+            float deltaX = -cos(glm::radians(-rotateRick)) * 0.08f;
+
+            if (translateRick.z + deltaZ <= 50.0f && translateRick.z + deltaZ >= -50.0f &&
+                translateRick.x + deltaX <= 50.0f && translateRick.x + deltaX >= -50.0f)
+            {
+                translateRick.z += deltaZ;
+                translateRick.x += deltaX;
+                caminando = true;
+            }
         }
+
 
         if (keys[GLFW_KEY_LEFT])
         {
