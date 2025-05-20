@@ -103,10 +103,14 @@ float tiempoPausa = 0.0f;
 
 //Animacion de hacha
 bool animarHacha = false;
+<<<<<<< HEAD
+float rotacionHacha = 0.0f;
+=======
 bool hachaDesplazando = false;
 float rotacionHacha = 0.0f;
 float desplazamientoHacha = 0.0f; // moverá el hacha hacia el fondo
 
+>>>>>>> 18d5b1ed6cc6b1a5aac750287ffac5f05aff9b0e
 
 // Animación de dados
 bool animarDados = false;
@@ -1691,10 +1695,18 @@ void Animation() {
         }
     }
 
+<<<<<<< HEAD
+
+
+    ////Animacion de hacha
+    //if (animarHacha) {
+    //    rotacionHacha += 1.5f; // velocidad del giro
+=======
     //Animacion de hacha
     if (animarHacha) {
         rotacionHacha -= 3.0f;                // Gira al revés
         desplazamientoHacha += 0.02f;         // Se mueve al mismo tiempo
+>>>>>>> 18d5b1ed6cc6b1a5aac750287ffac5f05aff9b0e
 
         if (rotacionHacha <= -360.0f) {
             rotacionHacha = -360.0f;
