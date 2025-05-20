@@ -100,6 +100,18 @@ bool brazoSubiendo = true;
 bool pausaInsertCoin = false;
 float tiempoPausa = 0.0f;
 
+// Animación de dados
+bool animarDados = false;
+float tiempoAnimacionDados = 0.0f;
+float duracionDados = 2.0f; // 2 segundos de animación
+
+float rotX1 = 0.0f, rotY1 = 0.0f, rotZ1 = 0.0f;
+float rotX2 = 0.0f, rotY2 = 0.0f, rotZ2 = 0.0f;
+float rotX3 = 0.0f, rotY3 = 0.0f, rotZ3 = 0.0f;
+float rotX4 = 0.0f, rotY4 = 0.0f, rotZ4 = 0.0f;
+float rotX5 = 0.0f, rotY5 = 0.0f, rotZ5 = 0.0f;
+
+
 //Variables animacion bateo
 bool animarPelota = false;
 float posPelotaX = -31.5f; 
@@ -795,7 +807,7 @@ int main()
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         reja.Draw(lightingShader);
 
-        //lanzamiento de dados
+        //DADOS
 		glm::mat4 modelTempDado = glm::mat4(1.0f); //Temp
 		modelTempDado = model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(-17.0f, 0.0f, -22.0f));
@@ -806,21 +818,57 @@ int main()
 		dadosA.Draw(lightingShader);
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		dadosB.Draw(lightingShader);
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		dado1.Draw(lightingShader);
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		dado2.Draw(lightingShader);
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		dado3.Draw(lightingShader);
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		dado4.Draw(lightingShader);
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		dado5.Draw(lightingShader);
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		mesaDados.Draw(lightingShader);
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        mesaDados.Draw(lightingShader);
+
+
+        glm::mat4 modelD1 = glm::mat4(1.0f);
+        modelD1 = glm::translate(modelD1, glm::vec3(-17.0f, 0.1f, -22.0f));
+        // 1. Rotaciones combinadas para rodar realista
+        modelD1 = glm::rotate(modelD1, glm::radians(rotX1), glm::vec3(1.0f, 0.0f, 0.0f));
+        modelD1 = glm::rotate(modelD1, glm::radians(rotY1), glm::vec3(0.0f, 1.0f, 0.0f));
+        modelD1 = glm::rotate(modelD1, glm::radians(rotZ1), glm::vec3(0.0f, 0.0f, 1.0f));
+
+        // 2. Escalar
+        modelD1 = glm::scale(modelD1, glm::vec3(0.08f));
+
+
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelD1));
+        dado1.Draw(lightingShader);
+
+
+       /* glm::mat4 modelD2 = glm::mat4(1.0f);
+        modelD2 = glm::translate(modelD2, glm::vec3(-16.5f, 0.1f, -21.5f));
+        modelD2 = glm::rotate(modelD2, glm::radians(rotacionDado2), glm::vec3(0.0f, 1.0f, 0.0f));
+        modelD2 = glm::scale(modelD2, glm::vec3(0.08f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelD2));
+        dado2.Draw(lightingShader);
+
+        glm::mat4 modelD3 = glm::mat4(1.0f);
+        modelD3 = glm::translate(modelD3, glm::vec3(-16.0f, 0.1f, -22.5f));
+        modelD3 = glm::rotate(modelD3, glm::radians(rotacionDado3), glm::vec3(0.0f, 1.0f, 0.0f));
+        modelD3 = glm::scale(modelD3, glm::vec3(0.08f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelD3));
+        dado3.Draw(lightingShader);
+
+        glm::mat4 modelD4 = glm::mat4(1.0f);
+        modelD4 = glm::translate(modelD4, glm::vec3(-17.5f, 0.1f, -21.0f));
+        modelD4 = glm::rotate(modelD4, glm::radians(rotacionDado4), glm::vec3(0.0f, 1.0f, 0.0f));
+        modelD4 = glm::scale(modelD4, glm::vec3(0.08f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelD4));
+        dado4.Draw(lightingShader);
+
+        glm::mat4 modelD5 = glm::mat4(1.0f);
+        modelD5 = glm::translate(modelD5, glm::vec3(-16.8f, 0.1f, -22.3f));
+        modelD5 = glm::rotate(modelD5, glm::radians(rotacionDado5), glm::vec3(0.0f, 1.0f, 0.0f));
+        modelD5 = glm::scale(modelD5, glm::vec3(0.08f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelD5));
+        dado5.Draw(lightingShader);*/
+
+		
 
         //BOLOS
-        
+  
         glm::mat4 modelTempBolos = glm::mat4(1.0f); 
         glm::mat4 modelTempBolos2 = glm::mat4(1.0f);
         glm::mat4 modelTempBolos3 = glm::mat4(1.0f);
@@ -1128,7 +1176,18 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
         animarBate = false;
         bateGolpeo = false;
     }
-    
+    if (key == GLFW_KEY_3 && action == GLFW_PRESS) {
+        animarDados = true;
+        tiempoAnimacionDados = 0.0f;
+
+        rotX1 = rotY1 = rotZ1 = 0.0f;
+        rotX2 = rotY2 = rotZ2 = 0.0f;
+        rotX3 = rotY3 = rotZ3 = 0.0f;
+        rotX4 = rotY4 = rotZ4 = 0.0f;
+        rotX5 = rotY5 = rotZ5 = 0.0f;
+    }
+
+
     if (key == GLFW_KEY_5) {
         puedeTeclear = false;
         tipoCamara = CAMARA_TERCERA_PERSONA;
@@ -1497,6 +1556,29 @@ void Animation() {
             camera.UpdateVectors();
         }
     }
+
+    //animacion de dados
+    if (animarDados) {
+        tiempoAnimacionDados += deltaTime;
+
+        rotX1 += 4.1f; rotY1 += 3.3f; rotZ1 += 2.7f;
+        rotX2 += 2.8f; rotY2 += 4.5f; rotZ2 += 1.9f;
+        rotX3 += 3.1f; rotY3 += 3.7f; rotZ3 += 3.0f;
+        rotX4 += 3.6f; rotY4 += 2.9f; rotZ4 += 2.5f;
+        rotX5 += 4.0f; rotY5 += 3.2f; rotZ5 += 2.3f;
+
+        if (tiempoAnimacionDados >= duracionDados) {
+            animarDados = false;
+            rotX1 = rotY1 = rotZ1 = 0.0f;
+            rotX2 = rotY2 = rotZ2 = 0.0f;
+            rotX3 = rotY3 = rotZ3 = 0.0f;
+            rotX4 = rotY4 = rotZ4 = 0.0f;
+            rotX5 = rotY5 = rotZ5 = 0.0f;
+        }
+    }
+
+   
+
 
 }
 
