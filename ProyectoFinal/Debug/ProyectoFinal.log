@@ -15,11 +15,11 @@ C:\Users\manue\OneDrive\Escritorio\ProyectoFinalCG\ProyectoFinal\Main.cpp(438,27
 C:\Users\manue\OneDrive\Escritorio\ProyectoFinalCG\ProyectoFinal\Main.cpp(438,27): warning C4244:         [
 C:\Users\manue\OneDrive\Escritorio\ProyectoFinalCG\ProyectoFinal\Main.cpp(438,27): warning C4244:             T=float
 C:\Users\manue\OneDrive\Escritorio\ProyectoFinalCG\ProyectoFinal\Main.cpp(438,27): warning C4244:         ]
-C:\Users\manue\OneDrive\Escritorio\ProyectoFinalCG\ProyectoFinal\Main.cpp(1402,27): warning C4018: '<': no coinciden signed/unsigned
-C:\Users\manue\OneDrive\Escritorio\ProyectoFinalCG\ProyectoFinal\Main.cpp(1602,21): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
-C:\Users\manue\OneDrive\Escritorio\ProyectoFinalCG\ProyectoFinal\Main.cpp(1603,21): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
-C:\Users\manue\OneDrive\Escritorio\ProyectoFinalCG\ProyectoFinal\Main.cpp(1607,25): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
-C:\Users\manue\OneDrive\Escritorio\ProyectoFinalCG\ProyectoFinal\Main.cpp(1608,25): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
-C:\Users\manue\OneDrive\Escritorio\ProyectoFinalCG\ProyectoFinal\Main.cpp(1610,17): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
-C:\Users\manue\OneDrive\Escritorio\ProyectoFinalCG\ProyectoFinal\Main.cpp(1611,17): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\manue\OneDrive\Escritorio\ProyectoFinalCG\ProyectoFinal\Main.cpp(1406,27): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\manue\OneDrive\Escritorio\ProyectoFinalCG\ProyectoFinal\Main.cpp(1606,21): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\manue\OneDrive\Escritorio\ProyectoFinalCG\ProyectoFinal\Main.cpp(1607,21): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\manue\OneDrive\Escritorio\ProyectoFinalCG\ProyectoFinal\Main.cpp(1611,25): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\manue\OneDrive\Escritorio\ProyectoFinalCG\ProyectoFinal\Main.cpp(1612,25): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\manue\OneDrive\Escritorio\ProyectoFinalCG\ProyectoFinal\Main.cpp(1614,17): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\manue\OneDrive\Escritorio\ProyectoFinalCG\ProyectoFinal\Main.cpp(1615,17): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
   ProyectoFinal.vcxproj -> C:\Users\manue\OneDrive\Escritorio\ProyectoFinalCG\Debug\ProyectoFinal.exe

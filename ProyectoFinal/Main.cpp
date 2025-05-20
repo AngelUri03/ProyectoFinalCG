@@ -100,6 +100,11 @@ bool brazoSubiendo = true;
 bool pausaInsertCoin = false;
 float tiempoPausa = 0.0f;
 
+//Animacion de hacha
+bool animarHacha = false;
+float rotacionHacha = 0.0f; // de 0 a 90 grados por ejemplo
+
+
 // Animación de dados
 bool animarDados = false;
 float tiempoAnimacionDados = 0.0f;
@@ -583,8 +588,8 @@ int main()
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelPiernaI));
         RickPiernaI.Draw(lightingShader);
 
-        //TOPOS
 
+        //TOPOS
         model = glm::mat4(1);
         model = glm::translate(model, glm::vec3(-17.0f, 0.0f, 24.0f));
         model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -694,8 +699,8 @@ int main()
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         Maquina.Draw(lightingShader);
 
-        //GLOBOS
 
+        //GLOBOS
         glm::mat4 modelTempGlobos = glm::mat4(1.0f); //Temp
         glm::mat4 modelTempGlobos2 = glm::mat4(1.0f); //Temp
         glm::mat4 modelTempGlobos3 = glm::mat4(1.0f); //Temp
@@ -790,22 +795,29 @@ int main()
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         globo3.Draw(lightingShader);
 
-        //HACHA
 
+        //HACHA
         glm::mat4 modelTempHacha = glm::mat4(1.0f); //Temp
         modelTempHacha = model = glm::mat4(1.0f);
         modelTempHacha = model = glm::translate(model, glm::vec3(17.0f, 0.15f, -22.0f));
         modelTempHacha = model = glm::scale(model, glm::vec3(0.08f, 0.08f, 0.08f));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         cajaHacha.Draw(lightingShader);
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-        hacha.Draw(lightingShader);
+
+        //glm::mat4 modelHacha = modelTempHacha; // usa el modelo base que ya tienes
+        //modelHacha = glm::translate(modelHacha, glm::vec3(0.0f, 1.0f, 0.0f)); // ajusta al centro de giro
+        //modelHacha = glm::rotate(modelHacha, glm::radians(rotacionHacha), glm::vec3(1.0f, 0.0f, 0.0f)); // gira en eje X
+        //modelHacha = glm::translate(modelHacha, glm::vec3(0.0f, -1.0f, 0.0f)); // regresa
+        //glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelHacha));
+        //hacha.Draw(lightingShader);
+
 
         model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(17.0f, 0.15f, -22.0f));
         model = glm::scale(model, glm::vec3(0.08f, 0.08f, 0.08f));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         reja.Draw(lightingShader);
+
 
         //DADOS
         glm::mat4 modelTempDado = glm::mat4(1.0f); //Temp
@@ -1196,14 +1208,22 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
         rotX5 = rotY5 = rotZ5 = 0.0f;
     }
 
+    /*if (key == GLFW_KEY_4 && action == GLFW_PRESS) {
+        animarHacha = true;
+        rotacionHacha = 0.0f;
+    }*/
 
-    if (key == GLFW_KEY_5) {
+
+    if (key == GLFW_KEY_5 && action == GLFW_PRESS) {
         puedeTeclear = false;
         tipoCamara = CAMARA_TERCERA_PERSONA;
         camera.SetYaw(0.0f);
         camera.SetPitch(0.0f);
         camera.UpdateVectors();
+
         insertCoinBolos = true;
+        tiempoAnimacion = 0.0f;
+
         lanzarCaparazon = true;
         posCaparazonX = 32.0f;
         impactoRotacion = 0.0f;
@@ -1211,6 +1231,7 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
         pinoPosY = 0.5f;
         pinosCaidos = false;
     }
+
 
 }
 
@@ -1585,6 +1606,16 @@ void Animation() {
             rotX5 = rotY5 = rotZ5 = 0.0f;
         }
     }
+
+    ////Animacion de hacha
+    //if (animarHacha) {
+    //    rotacionHacha += 1.5f; // velocidad del giro
+
+    //    if (rotacionHacha >= 90.0f) {
+    //        rotacionHacha = 90.0f; // límite
+    //        animarHacha = false;   // detiene la animación
+    //    }
+    //}
 
 
 
