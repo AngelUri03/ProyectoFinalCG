@@ -1578,11 +1578,11 @@ void Animation() {
 
         if (tiempoAnimacionDados >= duracionDados) {
             animarDados = false;
-            /*rotX1 = rotY1 = rotZ1 = 0.0f;
+            rotX1 = rotY1 = rotZ1 = 0.0f;
             rotX2 = rotY2 = rotZ2 = 0.0f;
             rotX3 = rotY3 = rotZ3 = 0.0f;
             rotX4 = rotY4 = rotZ4 = 0.0f;
-            rotX5 = rotY5 = rotZ5 = 0.0f;*/
+            rotX5 = rotY5 = rotZ5 = 0.0f;
         }
     }
 
