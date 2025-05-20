@@ -102,7 +102,9 @@ float tiempoPausa = 0.0f;
 
 //Animacion de hacha
 bool animarHacha = false;
-float rotacionHacha = 0.0f; // de 0 a 90 grados por ejemplo
+bool hachaDesplazando = false;
+float rotacionHacha = 0.0f;
+float desplazamientoHacha = 0.0f; // moverá el hacha hacia el fondo
 
 
 // Animación de dados
@@ -813,11 +815,12 @@ int main()
         cajaHacha.Draw(lightingShader);
 
         //dibujo de hacha animada
-        modelTempHacha = glm::translate(glm::mat4(1.0f), glm::vec3(17.0f, 3.0f, -22.0f));
+        modelTempHacha = glm::translate(glm::mat4(1.0f), glm::vec3(17.0f, 2.3f, -22.0f - desplazamientoHacha));
+        modelTempHacha = glm::rotate(modelTempHacha, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, -0.4f)); // ← rotación fija inicial
         modelTempHacha = glm::scale(modelTempHacha, glm::vec3(0.08f)); // escala como siempre
         glm::mat4 modelHacha = modelTempHacha;
         modelHacha = glm::translate(modelHacha, glm::vec3(0.0f, 0.5f, 0.0f));  // punto de pivote, ajusta si rota raro
-        modelHacha = glm::rotate(modelHacha, glm::radians(rotacionHacha), glm::vec3(1.0f, 0.0f, 0.0f)); // eje X: cae hacia caja
+        modelHacha = glm::rotate(modelHacha, glm::radians(rotacionHacha), glm::vec3(0.0f, 0.0f, 1.0f)); // eje X: cae hacia caja
         modelHacha = glm::translate(modelHacha, glm::vec3(0.0f, -0.5f, 0.0f)); // deshace el pivote
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelHacha));
         hacha.Draw(lightingShader);
@@ -1225,10 +1228,12 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
         rotX5 = rotY5 = rotZ5 = 0.0f;
     }
 
-    /*if (key == GLFW_KEY_4 && action == GLFW_PRESS) {
+    if (key == GLFW_KEY_4 && action == GLFW_PRESS) {
         animarHacha = true;
+        hachaDesplazando = false;
         rotacionHacha = 0.0f;
-    }*/
+        desplazamientoHacha = 0.0f;
+    }
 
 
     if (key == GLFW_KEY_5 && action == GLFW_PRESS) {
@@ -1624,16 +1629,20 @@ void Animation() {
         }
     }
 
-    ////Animacion de hacha
-    //if (animarHacha) {
-    //    rotacionHacha += 1.5f; // velocidad del giro
+    //Animacion de hacha
+    if (animarHacha) {
+        rotacionHacha -= 3.0f;                // Gira al revés
+        desplazamientoHacha += 0.02f;         // Se mueve al mismo tiempo
 
-    //    if (rotacionHacha >= 90.0f) {
-    //        rotacionHacha = 90.0f; // límite
-    //        animarHacha = false;   // detiene la animación
-    //    }
-    //}
+        if (rotacionHacha <= -360.0f) {
+            rotacionHacha = -360.0f;
+        }
 
+        if (desplazamientoHacha >= 2.5f) {
+            desplazamientoHacha = 2.5f;
+            animarHacha = false;              // Detiene todo
+        }
+    }
 
 
 
