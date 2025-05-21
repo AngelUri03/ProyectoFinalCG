@@ -107,6 +107,18 @@ bool hachaDesplazando = false;
 float rotacionHacha = 0.0f;
 float desplazamientoHacha = 0.0f; // moverá el hacha hacia el fondo
 
+//Animacion de globos
+bool animarDardos = false;
+bool animarDardo1 = false;
+bool animarDardo2 = false;
+bool animarDardo3 = false;
+float posDardo1Z = -13.0f;
+float posDardo2Z = -13.0f;
+float posDardo3Z = -13.0f;
+bool globo1Visible = true;
+bool globo2Visible = true;
+bool globo3Visible = true;
+
 
 // Animación de dados
 bool animarDados = false;
@@ -965,25 +977,45 @@ int main()
         modelTempGlobos = model = glm::scale(modelTempGlobos, glm::vec3(0.40f, 0.40f, 0.40f));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         cajaGlobos.Draw(lightingShader);
-        model = modelTempGlobos;
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        // Dardo 1
+        glm::mat4 modelG1 = modelTempGlobos;
+        modelG1 = glm::translate(modelG1, glm::vec3(6.0f, 9.0f, posDardo1Z));
+        modelG1 = glm::rotate(modelG1, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelG1));
         dardo1.Draw(lightingShader);
-        model = modelTempGlobos;
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+
+        // Dardo 2
+        glm::mat4 modelG2 = modelTempGlobos;
+        modelG2 = glm::translate(modelG2, glm::vec3(2.85f, 4.5f, posDardo2Z));
+        modelG2 = glm::rotate(modelG2, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelG2));
         dardo2.Draw(lightingShader);
-        model = modelTempGlobos;
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+
+        // Dardo 3
+        glm::mat4 modelG3 = modelTempGlobos;
+        modelG3 = glm::translate(modelG3, glm::vec3(3.7f, 4.2f, posDardo3Z));
+        modelG3 = glm::rotate(modelG3, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelG3));
         dardo3.Draw(lightingShader);
 
-        model = modelTempGlobos;
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-        globo1.Draw(lightingShader);
-        model = modelTempGlobos;
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-        globo2.Draw(lightingShader);
-        model = modelTempGlobos;
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-        globo3.Draw(lightingShader);
+        // Globos (solo si están visibles)
+        if (globo1Visible) {
+            model = modelTempGlobos;
+            glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+            globo1.Draw(lightingShader);
+        }
+        if (globo2Visible) {
+            model = modelTempGlobos;
+            glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+            globo2.Draw(lightingShader);
+        }
+        if (globo3Visible) {
+            model = modelTempGlobos;
+            glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+            globo3.Draw(lightingShader);
+        }
+
+
 
         modelTempGlobos2 = glm::translate(modelTempGlobos, glm::vec3(-12.0f, 0.0f, 0.0f));
         model = modelTempGlobos2;
@@ -1251,6 +1283,18 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
         pinoPosY = 0.5f;
         pinosCaidos = false;
     }
+
+    if (key == GLFW_KEY_6 && action == GLFW_PRESS) {
+        animarDardos = true;
+        animarDardo1 = true;
+        animarDardo2 = false;
+        animarDardo3 = false;
+
+        posDardo1Z = posDardo2Z = posDardo3Z = -13.0f;
+
+        globo1Visible = globo2Visible = globo3Visible = true;
+    }
+
 
 
 }
@@ -1705,6 +1749,54 @@ void Animation() {
             animarHacha = false;              // Detiene todo
         }
     }
+
+    //Animacion de globos
+    if (animarDardos) {
+        float velocidad = 0.1f;
+        float impactoZ = -3.0f;
+        float limiteZ = -2.5f;
+
+        if (animarDardo1) {
+            if (globo1Visible && posDardo1Z + velocidad >= impactoZ)
+                globo1Visible = false;
+
+            if (posDardo1Z < limiteZ) {
+                posDardo1Z += velocidad;
+            }
+            else {
+                animarDardo1 = false;
+                animarDardo2 = true;
+            }
+        }
+
+        if (animarDardo2) {
+            if (globo3Visible && posDardo2Z + velocidad >= impactoZ)
+                globo3Visible = false;
+
+            if (posDardo2Z < limiteZ) {
+                posDardo2Z += velocidad;
+            }
+            else {
+                animarDardo2 = false;
+                animarDardo3 = true;
+            }
+        }
+
+        if (animarDardo3) {
+            if (globo2Visible && posDardo3Z + velocidad >= impactoZ)
+                globo2Visible = false;
+
+            if (posDardo3Z < limiteZ) {
+                posDardo3Z += velocidad;
+            }
+            else {
+                animarDardo3 = false;
+                animarDardos = false;
+            }
+        }
+    }
+
+
 
 
 
