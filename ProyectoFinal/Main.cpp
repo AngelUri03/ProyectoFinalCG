@@ -306,6 +306,107 @@ GLuint indices[] =
     32,33,34,35
 };
 
+const int NUM_LUCES = 72;
+
+struct Luz {
+    glm::vec3 posicion;
+    glm::vec3 color;
+    float alcance;
+};
+
+Luz luces[NUM_LUCES] = {
+    //Rojo
+    {glm::vec3(8.7f, 4.3f, 8.0f), glm::vec3(1.0f, 0.0f, 0.0f), 20.0f},
+    {glm::vec3(16.0f, 5.7f, 18.9f), glm::vec3(1.0f, 0.0f, 0.0f), 20.0f},
+    {glm::vec3(17.2f, 5.8f, 20.7f), glm::vec3(1.0f, 0.0f, 0.0f), 20.0f},
+    {glm::vec3(9.5f, 4.5f, -8.8f), glm::vec3(1.0f, 0.0f, 0.0f), 20.0f},
+    {glm::vec3(16.4f, 5.9f, -19.8f), glm::vec3(1.0f, 0.0f, 0.0f), 20.0f},
+    {glm::vec3(17.6f, 6.0f, -21.7f), glm::vec3(1.0f, 0.0f, 0.0f), 20.0f},
+    {glm::vec3(-7.9f, 4.3f, -5.9f), glm::vec3(1.0f, 0.0f, 0.0f), 20.0f},
+    {glm::vec3(-9.3f, 4.4f, -8.0f), glm::vec3(1.0f, 0.0f, 0.0f), 20.0f},
+    {glm::vec3(-16.1f, 5.5f, -19.2f), glm::vec3(1.0f, 0.0f, 0.0f), 20.0f},
+    {glm::vec3(-17.2f, 5.7f, -21.0f), glm::vec3(1.0f, 0.0f, 0.0f), 20.0f},
+    {glm::vec3(-6.7f, 4.1f, 4.1f), glm::vec3(1.0f, 0.0f, 0.0f), 20.0f},
+    {glm::vec3(-8.3f, 4.2f, 6.3f), glm::vec3(1.0f, 0.0f, 0.0f), 20.0f},
+    {glm::vec3(-15.0f, 5.2f, 17.2f), glm::vec3(1.0f, 0.0f, 0.0f), 20.0f},
+    {glm::vec3(-16.2f, 5.5f, 19.2f), glm::vec3(1.0f, 0.0f, 0.0f), 20.0f},
+    
+    // Verde
+    {glm::vec3(7.3f, 4.1f, 5.5f), glm::vec3(0.0f, 1.0f, 0.0f), 20.0f},
+    {glm::vec3(14.7f, 5.2f, 17.0f), glm::vec3(0.0f, 1.0f, 0.0f), 20.0f},
+    {glm::vec3(7.9f, 4.2f, -6.3f), glm::vec3(0.0f, 1.0f, 0.0f), 20.0f},
+    {glm::vec3(15.2f, 5.3f, -17.9f), glm::vec3(0.0f, 1.0f, 0.0f), 20.0f},
+    {glm::vec3(-14.9f, 5.0f, -17.3f), glm::vec3(0.0f, 1.0f, 0.0f), 20.0f},
+    {glm::vec3(-13.9f, 5.0f, 15.5f), glm::vec3(0.0f, 1.0f, 0.0f), 20.0f},
+
+    //Amarillo
+    {glm::vec3(10.5f, 4.4f, 10.5f), glm::vec3(1.0f, 1.0f, 0.0f), 20.0f},
+    {glm::vec3(11.2f, 4.6f, -11.3f), glm::vec3(1.0f, 1.0f, 0.0f), 20.0f},
+    {glm::vec3(-10.9f, 4.5f, -10.9f), glm::vec3(1.0f, 1.0f, 0.0f), 20.0f},
+    {glm::vec3(-9.9f, 4.3f, 9.1f), glm::vec3(1.0f, 1.0f, 0.0f), 20.0f},
+
+    //Azul
+    {glm::vec3(11.9f, 4.7f, 12.9f), glm::vec3(0.0f, 0.0f, 1.0f), 20.0f},
+    {glm::vec3(12.7f, 4.9f, -13.5f), glm::vec3(0.0f, 0.0f, 1.0f), 20.0f},
+    {glm::vec3(-12.5f, 4.8f, -13.2f), glm::vec3(0.0f, 0.0f, 1.0f), 20.0f},
+    {glm::vec3(-11.4f, 4.6f, 11.4f), glm::vec3(0.0f, 0.0f, 1.0f), 20.0f},
+
+    //Morado
+    {glm::vec3(13.3f, 4.9f, 15.0f), glm::vec3(0.5f, 0.0f, 0.5f), 20.0f},
+    {glm::vec3(14.0f, 5.1f, -15.6f), glm::vec3(0.5f, 0.0f, 0.5f), 20.0f},
+    {glm::vec3(-13.7f, 4.9f, -15.2f), glm::vec3(0.5f, 0.0f, 0.5f), 20.0f},
+    {glm::vec3(-12.5f, 4.7f, 13.3f), glm::vec3(0.5f, 0.0f, 0.5f), 20.0f},
+
+    //Blanco
+    {glm::vec3(-19.7f, 7.0f, 24.8f), glm::vec3(1.0f, 1.0f, 1.0f), 20.0f},
+    {glm::vec3(-14.5f, 7.1f, 24.9f), glm::vec3(1.0f, 1.0f, 1.0f), 20.0f},
+    {glm::vec3(14.3f, 7.2f, 25.0f), glm::vec3(1.0f, 1.0f, 1.0f), 20.0f},
+    {glm::vec3(19.9f, 6.9f, 25.0f), glm::vec3(1.0f, 1.0f, 1.0f), 20.0f},
+    {glm::vec3(19.5f, 7.0f, -24.8f), glm::vec3(1.0f, 1.0f, 1.0f), 20.0f},
+    {glm::vec3(14.0f, 7.1f, -25.0f), glm::vec3(1.0f, 1.0f, 1.0f), 20.0f},
+    {glm::vec3(-13.9f, 7.0f, -25.0f), glm::vec3(1.0f, 1.0f, 1.0f), 20.0f},
+    {glm::vec3(-20.0f, 7.0f, -25.0f), glm::vec3(1.0f, 1.0f, 1.0f), 20.0f},
+    {glm::vec3(38.1f, 7.0f, -2.7f), glm::vec3(1.0f, 1.0f, 1.0f), 20.0f},
+    {glm::vec3(38.0f, 7.2f, 2.8f), glm::vec3(1.0f, 1.0f, 1.0f), 20.0f},
+    {glm::vec3(-38.0f, 7.0f, 2.7f), glm::vec3(1.0f, 1.0f, 1.0f), 20.0f},
+    {glm::vec3(-38.0f, 6.8f, -2.9f), glm::vec3(1.0f, 1.0f, 1.0f), 20.0f},
+
+    {glm::vec3(-21.0f, 1.6f, -8.0f), glm::vec3(1.0f, 1.0f, 1.0f), 20.0f},
+    {glm::vec3(-21.0f, 1.6f, 8.0f), glm::vec3(1.0f, 1.0f, 1.0f), 20.0f},
+    {glm::vec3(21.0f, 1.6f, 8.0f), glm::vec3(1.0f, 1.0f, 1.0f), 20.0f},
+    {glm::vec3(21.0f, 1.6f, -8.0f), glm::vec3(1.0f, 1.0f, 1.0f), 20.0f},
+
+    {glm::vec3(-49.8f, 0.05f,-49.8), glm::vec3(1.0f, 1.0f, 1.0f), 50.0f},
+    {glm::vec3(-49.8f, 0.05f,49.8), glm::vec3(1.0f, 1.0f, 1.0f), 50.0f},
+    {glm::vec3(49.8f, 0.05f,-49.8), glm::vec3(1.0f, 1.0f, 1.0f), 50.0f},
+    {glm::vec3(49.8f, 0.05f,49.8), glm::vec3(1.0f, 1.0f, 1.0f), 50.0f},
+    {glm::vec3(49.8f, 0.05f,-39.9), glm::vec3(1.0f, 1.0f, 1.0f), 50.0f},
+    {glm::vec3(49.8f, 0.05f,39.9), glm::vec3(1.0f, 1.0f, 1.0f), 50.0f},
+    {glm::vec3(5.0f, 0.05f,40.0), glm::vec3(1.0f, 1.0f, 1.0f), 50.0f},
+    {glm::vec3(-5.0f, 0.05f,40.0), glm::vec3(1.0f, 1.0f, 1.0f), 50.0f},
+
+    {glm::vec3(-38.4f, 2.2f, -0.4f), glm::vec3(1.0f, 1.0f, 1.0f), 13.0f},
+    {glm::vec3(-38.4f, 2.2f, 4.5f), glm::vec3(1.0f, 1.0f, 1.0f), 13.0f},
+    {glm::vec3(-38.4f, 2.2f, -4.4f), glm::vec3(1.0f, 1.0f, 1.0f), 13.0f},
+
+    {glm::vec3(-21.6f, 1.1f, -24.8f), glm::vec3(1.0f, 1.0f, 1.0f), 13.0f},
+    {glm::vec3(-17.0f, 0.8f, -25.0f), glm::vec3(1.0f, 1.0f, 1.0f), 13.0f},
+    {glm::vec3(-12.3f, 0.7f, -25.1f), glm::vec3(1.0f, 1.0f, 1.0f), 13.0f},
+
+    {glm::vec3(12.4f, 3.0f, -25.6f), glm::vec3(1.0f, 1.0f, 1.0f), 13.0f},
+    {glm::vec3(17.3f, 3.0f, -25.6f), glm::vec3(1.0f, 1.0f, 1.0f), 13.0f},
+    {glm::vec3(22.0f, 3.0f, -25.6f), glm::vec3(1.0f, 1.0f, 1.0f), 13.0f},
+
+    {glm::vec3(37.2f, 0.2f, -4.5f), glm::vec3(1.0f, 1.0f, 1.0f), 13.0f},
+    {glm::vec3(37.2f, 0.2f, -2.96f), glm::vec3(1.0f, 1.0f, 1.0f), 13.0f},
+    {glm::vec3(37.2f, 0.2f, -1.4f), glm::vec3(1.0f, 1.0f, 1.0f), 13.0f},
+    {glm::vec3(37.2f, 0.2f, 0.2f), glm::vec3(1.0f, 1.0f, 1.0f), 13.0f},
+    {glm::vec3(37.2f, 0.2f, 1.8f), glm::vec3(1.0f, 1.0f, 1.0f), 13.0f},
+    {glm::vec3(37.2f, 0.2f, 3.4f), glm::vec3(1.0f, 1.0f, 1.0f), 13.0f},
+    {glm::vec3(37.2f, 0.2f, 4.95f), glm::vec3(1.0f, 1.0f, 1.0f), 13.0f},
+
+};
+
 glm::vec3 Light1 = glm::vec3(0);
 
 GLfloat deltaTime = 0.0f;
@@ -359,7 +460,6 @@ int main()
 
     //Modelo Feria
     Model Feria((char*)"Models/Feria.obj");
-    Model Luces((char*)"Models/luces/luces.obj");
     Model Finn((char*)"Models/texturas_finn/finn.obj");
     Model Luigi((char*)"Models/Luigi/luigi.obj");
 
@@ -492,8 +592,6 @@ int main()
         GLint viewPosLoc = glGetUniformLocation(lightingShader.Program, "viewPos");
         glUniform3f(viewPosLoc, camera.GetPosition().x, camera.GetPosition().y, camera.GetPosition().z);
 
-
-        // Directional light
         if (!esDeNoche) {
             glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.direction"), -0.2f, -1.0f, -0.3f);
             glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.ambient"), 0.4f, 0.4f, 0.4f);
@@ -507,24 +605,45 @@ int main()
             glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.specular"), 0.1f, 0.1f, 0.2f);
         }
 
+        for (int i = 0; i < NUM_LUCES; i++) {
+            std::string index = "pointLights[" + std::to_string(i) + "]";
+            glm::vec3 pos = luces[i].posicion;
+            glm::vec3 col = luces[i].color;
+            float alcance = luces[i].alcance;
+            float intensidadFija = esDeNoche ? 2.0f : 0.0f;
+
+            glUniform3f(glGetUniformLocation(lightingShader.Program, (index + ".position").c_str()), pos.x, pos.y, pos.z);
+            glUniform3f(glGetUniformLocation(lightingShader.Program, (index + ".ambient").c_str()), col.x * 0.1f * intensidadFija, col.y * 0.1f * intensidadFija, col.z * 0.1f * intensidadFija);
+            glUniform3f(glGetUniformLocation(lightingShader.Program, (index + ".diffuse").c_str()), col.x * intensidadFija, col.y * intensidadFija, col.z * intensidadFija);
+            glUniform3f(glGetUniformLocation(lightingShader.Program, (index + ".specular").c_str()), intensidadFija, intensidadFija, intensidadFija);
+            glUniform1f(glGetUniformLocation(lightingShader.Program, (index + ".constant").c_str()), 1.0f);
+
+            float linear, quadratic;
+            if (alcance <= 7.0f) {
+                linear = 0.7f; quadratic = 1.8f;
+            }
+            else if (alcance <= 13.0f) {
+                linear = 0.35f; quadratic = 0.44f;
+            }
+            else if (alcance <= 20.0f) {
+                linear = 0.22f; quadratic = 0.20f;
+            }
+            else if (alcance <= 50.0f) {
+                linear = 0.09f; quadratic = 0.032f;
+            }
+            else if (alcance <= 100.0f) {
+                linear = 0.045f; quadratic = 0.0075f;
+            }
+            else {
+                linear = 0.02f; quadratic = 0.001f;
+            }
+
+            glUniform1f(glGetUniformLocation(lightingShader.Program, (index + ".linear").c_str()), linear);
+            glUniform1f(glGetUniformLocation(lightingShader.Program, (index + ".quadratic").c_str()), quadratic);
+        }
+
         glm::vec3 lightDir = glm::vec3(-0.2f, -1.0f, -0.3f);
         glUniform3f(glGetUniformLocation(lightingShader.Program, "light.direction"), lightDir.x, lightDir.y, lightDir.z);
-
-        // Point light 1
-        glm::vec3 lightColor;
-        lightColor.x = abs(sin(glfwGetTime() * Light1.x));
-        lightColor.y = abs(sin(glfwGetTime() * Light1.y));
-        lightColor.z = sin(glfwGetTime() * Light1.z);
-
-
-        glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[0].position"), pointLightPositions[0].x, pointLightPositions[0].y, pointLightPositions[0].z);
-        glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[0].ambient"), lightColor.x, lightColor.y, lightColor.z);
-        glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[0].diffuse"), lightColor.x, lightColor.y, lightColor.z);
-        glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[0].specular"), 1.0f, 0.2f, 0.2f);
-        glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[0].constant"), 1.0f);
-        glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[0].linear"), 0.045f);
-        glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[0].quadratic"), 0.075f);
-
 
         // SpotLight
         glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight.position"), camera.GetPosition().x, camera.GetPosition().y, camera.GetPosition().z);
@@ -622,7 +741,6 @@ int main()
             camera.SetPitch(-15.0f);
             camera.UpdateVectors();
         }
-
         glm::mat4 view;
         view = camera.GetViewMatrix();
 
@@ -637,10 +755,7 @@ int main()
         glm::mat4 model = glm::mat4(1);
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         Feria.Draw(lightingShader);
-        
-        model = glm::mat4(1);
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-        Luces.Draw(lightingShader);
+
 
         //RICK
 
@@ -1213,11 +1328,28 @@ void DoMovement()
     if (!puedeTeclear) return;
 
     if (tipoCamara == CAMARA_LIBRE) {
-        if (keys[GLFW_KEY_W]) camera.ProcessKeyboard(FORWARD, deltaTime);
-        if (keys[GLFW_KEY_S]) camera.ProcessKeyboard(BACKWARD, deltaTime);
-        if (keys[GLFW_KEY_A]) camera.ProcessKeyboard(LEFT, deltaTime);
-        if (keys[GLFW_KEY_D]) camera.ProcessKeyboard(RIGHT, deltaTime);
+        if (keys[GLFW_KEY_W]) {
+            camera.ProcessKeyboard(FORWARD, deltaTime);
+            glm::vec3 pos = camera.GetPosition();
+            std::cout << "Camara: X=" << pos.x << " Y=" << pos.y << " Z=" << pos.z << std::endl;
+        }
+        if (keys[GLFW_KEY_S]) {
+            camera.ProcessKeyboard(BACKWARD, deltaTime);
+            glm::vec3 pos = camera.GetPosition();
+            std::cout << "Camara: X=" << pos.x << " Y=" << pos.y << " Z=" << pos.z << std::endl;
+        }
+        if (keys[GLFW_KEY_A]) {
+            camera.ProcessKeyboard(LEFT, deltaTime);
+            glm::vec3 pos = camera.GetPosition();
+            std::cout << "Camara: X=" << pos.x << " Y=" << pos.y << " Z=" << pos.z << std::endl;
+        }
+        if (keys[GLFW_KEY_D]) {
+            camera.ProcessKeyboard(RIGHT, deltaTime);
+            glm::vec3 pos = camera.GetPosition();
+            std::cout << "Camara: X=" << pos.x << " Y=" << pos.y << " Z=" << pos.z << std::endl;
+        }
     }
+
 
     if (tipoCamara == CAMARA_TERCERA_PERSONA) {
 
@@ -1225,8 +1357,8 @@ void DoMovement()
 
         if (keys[GLFW_KEY_UP])
         {
-            float deltaZ = sin(glm::radians(-rotateRick)) * 0.07f;
-            float deltaX = cos(glm::radians(-rotateRick)) * 0.07f;
+            float deltaZ = sin(glm::radians(-rotateRick)) * 0.1f;
+            float deltaX = cos(glm::radians(-rotateRick)) * 0.1f;
 
             if (translateRick.z + deltaZ <= 50.0f && translateRick.z + deltaZ >= -50.0f &&
                 translateRick.x + deltaX <= 50.0f && translateRick.x + deltaX >= -50.0f)
@@ -1239,8 +1371,8 @@ void DoMovement()
 
         if (keys[GLFW_KEY_DOWN])
         {
-            float deltaZ = -sin(glm::radians(-rotateRick)) * 0.08f;
-            float deltaX = -cos(glm::radians(-rotateRick)) * 0.08f;
+            float deltaZ = -sin(glm::radians(-rotateRick)) * 0.1f;
+            float deltaX = -cos(glm::radians(-rotateRick)) * 0.1f;
 
             if (translateRick.z + deltaZ <= 50.0f && translateRick.z + deltaZ >= -50.0f &&
                 translateRick.x + deltaX <= 50.0f && translateRick.x + deltaX >= -50.0f)
@@ -1254,22 +1386,12 @@ void DoMovement()
 
         if (keys[GLFW_KEY_LEFT])
         {
-            rotateRick += 0.8f;
-            std::cout << "Posición Rick: ("
-                << translateRick.x << ", "
-                << translateRick.y << ", "
-                << translateRick.z << ") - Rotación Y: "
-                << rotateRick << "°" << std::endl;
+            rotateRick += 1.0f;
         }
 
         if (keys[GLFW_KEY_RIGHT])
         {
-            rotateRick -= 0.8f;
-            std::cout << "Posición Rick: ("
-                << translateRick.x << ", "
-                << translateRick.y << ", "
-                << translateRick.z << ") - Rotación Y: "
-                << rotateRick << "°" << std::endl;
+            rotateRick -= 1.0f;
         }
     }
 
