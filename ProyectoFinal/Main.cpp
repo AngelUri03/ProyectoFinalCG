@@ -361,6 +361,8 @@ int main()
     Model Feria((char*)"Models/Feria.obj");
     Model Luces((char*)"Models/luces/luces.obj");
     Model Finn((char*)"Models/texturas_finn/finn.obj");
+    Model Luigi((char*)"Models/Luigi/luigi.obj");
+
 
     //Modelo Rick
     Model RickCuerpo((char*)"Models/RickCuerpo.obj");
@@ -689,6 +691,14 @@ int main()
         model = glm::scale(model, glm::vec3(0.15f, 0.15f, 0.15f));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         Finn.Draw(lightingShader);
+
+
+        model = glm::mat4(1);
+        model = glm::translate(model, glm::vec3(30.0f, 0.1f, 8.0f));
+        model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+        model = glm::scale(model, glm::vec3(0.019f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        Luigi.Draw(lightingShader);
 
         //TOPOS
 

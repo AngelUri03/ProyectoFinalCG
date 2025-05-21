@@ -1,4 +1,5 @@
 ﻿  Main.cpp
+<<<<<<< HEAD
 C:\Users\angyv\OneDrive\Documents\Angel\TeoriaCompuGrafica\ProyectoFinalCG\ProyectoFinal\Main.cpp(474,30): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
 C:\Users\angyv\OneDrive\Documents\Angel\TeoriaCompuGrafica\ProyectoFinalCG\ProyectoFinal\Main.cpp(513,27): warning C4244: '=': conversión de 'double' a 'T'; posible pérdida de datos
 C:\Users\angyv\OneDrive\Documents\Angel\TeoriaCompuGrafica\ProyectoFinalCG\ProyectoFinal\Main.cpp(513,27): warning C4244:         with
@@ -28,3 +29,32 @@ soil2-debug.lib(image_DXT.obj) : warning LNK4099: no se encontró PDB '' con 'so
 soil2-debug.lib(image_helper.obj) : warning LNK4099: no se encontró PDB '' con 'soil2-debug.lib(image_helper.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
 soil2-debug.lib(SOIL2.obj) : warning LNK4099: no se encontró PDB '' con 'soil2-debug.lib(SOIL2.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
   ProyectoFinal.vcxproj -> C:\Users\angyv\OneDrive\Documents\Angel\TeoriaCompuGrafica\ProyectoFinalCG\Debug\ProyectoFinal.exe
+=======
+C:\Users\manue\OneDrive\Escritorio\ProyectoFinalCG\ProyectoFinal\Main.cpp(470,30): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\manue\OneDrive\Escritorio\ProyectoFinalCG\ProyectoFinal\Main.cpp(509,27): warning C4244: '=': conversión de 'double' a 'T'; posible pérdida de datos
+C:\Users\manue\OneDrive\Escritorio\ProyectoFinalCG\ProyectoFinal\Main.cpp(509,27): warning C4244:         with
+C:\Users\manue\OneDrive\Escritorio\ProyectoFinalCG\ProyectoFinal\Main.cpp(509,27): warning C4244:         [
+C:\Users\manue\OneDrive\Escritorio\ProyectoFinalCG\ProyectoFinal\Main.cpp(509,27): warning C4244:             T=float
+C:\Users\manue\OneDrive\Escritorio\ProyectoFinalCG\ProyectoFinal\Main.cpp(509,27): warning C4244:         ]
+C:\Users\manue\OneDrive\Escritorio\ProyectoFinalCG\ProyectoFinal\Main.cpp(510,27): warning C4244: '=': conversión de 'double' a 'T'; posible pérdida de datos
+C:\Users\manue\OneDrive\Escritorio\ProyectoFinalCG\ProyectoFinal\Main.cpp(510,27): warning C4244:         with
+C:\Users\manue\OneDrive\Escritorio\ProyectoFinalCG\ProyectoFinal\Main.cpp(510,27): warning C4244:         [
+C:\Users\manue\OneDrive\Escritorio\ProyectoFinalCG\ProyectoFinal\Main.cpp(510,27): warning C4244:             T=float
+C:\Users\manue\OneDrive\Escritorio\ProyectoFinalCG\ProyectoFinal\Main.cpp(510,27): warning C4244:         ]
+C:\Users\manue\OneDrive\Escritorio\ProyectoFinalCG\ProyectoFinal\Main.cpp(511,27): warning C4244: '=': conversión de 'double' a 'T'; posible pérdida de datos
+C:\Users\manue\OneDrive\Escritorio\ProyectoFinalCG\ProyectoFinal\Main.cpp(511,27): warning C4244:         with
+C:\Users\manue\OneDrive\Escritorio\ProyectoFinalCG\ProyectoFinal\Main.cpp(511,27): warning C4244:         [
+C:\Users\manue\OneDrive\Escritorio\ProyectoFinalCG\ProyectoFinal\Main.cpp(511,27): warning C4244:             T=float
+C:\Users\manue\OneDrive\Escritorio\ProyectoFinalCG\ProyectoFinal\Main.cpp(511,27): warning C4244:         ]
+C:\Users\manue\OneDrive\Escritorio\ProyectoFinalCG\ProyectoFinal\Main.cpp(1645,27): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\manue\OneDrive\Escritorio\ProyectoFinalCG\ProyectoFinal\Main.cpp(1976,21): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\manue\OneDrive\Escritorio\ProyectoFinalCG\ProyectoFinal\Main.cpp(1977,21): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\manue\OneDrive\Escritorio\ProyectoFinalCG\ProyectoFinal\Main.cpp(1981,25): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\manue\OneDrive\Escritorio\ProyectoFinalCG\ProyectoFinal\Main.cpp(1982,25): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\manue\OneDrive\Escritorio\ProyectoFinalCG\ProyectoFinal\Main.cpp(1984,17): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\manue\OneDrive\Escritorio\ProyectoFinalCG\ProyectoFinal\Main.cpp(1985,17): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+soil2-debug.lib(image_DXT.obj) : warning LNK4099: no se encontró PDB 'soil2-debug.pdb' con 'soil2-debug.lib(image_DXT.obj)' o en 'C:\Users\manue\OneDrive\Escritorio\ProyectoFinalCG\Debug\soil2-debug.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
+soil2-debug.lib(image_helper.obj) : warning LNK4099: no se encontró PDB 'soil2-debug.pdb' con 'soil2-debug.lib(image_helper.obj)' o en 'C:\Users\manue\OneDrive\Escritorio\ProyectoFinalCG\Debug\soil2-debug.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
+soil2-debug.lib(SOIL2.obj) : warning LNK4099: no se encontró PDB '' con 'soil2-debug.lib(SOIL2.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
+  ProyectoFinal.vcxproj -> C:\Users\manue\OneDrive\Escritorio\ProyectoFinalCG\Debug\ProyectoFinal.exe
+>>>>>>> ea646b693f0abdc15fe5b2203a58cac04f5f9dd7
