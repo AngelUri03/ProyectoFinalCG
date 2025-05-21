@@ -48,7 +48,8 @@ enum TipoCamara {
     CAMARA_JUEGO_BATEO,
     CAMARA_JUEGO_BOLOS,
     CAMARA_JUEGO_DADOS,
-    CAMARA_JUEGO_HACHA
+    CAMARA_JUEGO_HACHA,
+    CAMARA_JUEGO_GLOBOS
 };
 TipoCamara tipoCamara = CAMARA_TERCERA_PERSONA;
 glm::vec3 dronePos = glm::vec3(0.0f, 60.0f, 0.0f);
@@ -99,11 +100,13 @@ bool juegoBatearActivo = false;
 bool juegoBolosActivo = false;
 bool juegoDadosActivo = false;
 bool juegoHachaActivo = false;
+bool juegoGlobosActivo = false;
 bool insertCoinTopos = false;
 bool insertCoinBatear = false;
 bool insertCoinBolos = false;
 bool insertCoinDados = false;
 bool insertCoinHacha = false;
+bool insertCoinGlobos = false;
 
 bool puedeTeclear = true;
 bool esDeNoche = false;
@@ -137,12 +140,15 @@ bool animarDardos = false;
 bool animarDardo1 = false;
 bool animarDardo2 = false;
 bool animarDardo3 = false;
-float posDardo1Z = -13.0f;
-float posDardo2Z = -13.0f;
-float posDardo3Z = -13.0f;
-bool globo1Visible = true;
-bool globo2Visible = true;
-bool globo3Visible = true;
+float posDardo1Z = -2.5f;
+float posDardo2Z = -2.5f;
+float posDardo3Z = -2.5f;
+bool globo1Visible = false;
+bool globo2Visible = false;
+bool globo3Visible = false;
+float tiempoAnimacionDardos = 0.0f;
+float tiempoEsperaDardos = 0.0f;
+bool enEsperaDardos = false;
 
 // Animación de dados
 bool animarDados = false;
@@ -608,6 +614,12 @@ int main()
             camera.SetPitch(-15.0f);
             camera.UpdateVectors();
         }
+        if (tipoCamara == CAMARA_JUEGO_GLOBOS) {
+            camera.SetPosition(glm::vec3(17.0f, 3.5f, 20.0f));
+            camera.SetYaw(90.0f);
+            camera.SetPitch(-15.0f);
+            camera.UpdateVectors();
+        }
 
         glm::mat4 view;
         view = camera.GetViewMatrix();
@@ -1042,28 +1054,25 @@ int main()
         modelTempGlobos = model = glm::scale(modelTempGlobos, glm::vec3(0.40f, 0.40f, 0.40f));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         cajaGlobos.Draw(lightingShader);
-        // Dardo 1
+
         glm::mat4 modelG1 = modelTempGlobos;
         modelG1 = glm::translate(modelG1, glm::vec3(6.0f, 9.0f, posDardo1Z));
         modelG1 = glm::rotate(modelG1, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelG1));
         dardo1.Draw(lightingShader);
 
-        // Dardo 2
         glm::mat4 modelG2 = modelTempGlobos;
         modelG2 = glm::translate(modelG2, glm::vec3(2.85f, 4.5f, posDardo2Z));
         modelG2 = glm::rotate(modelG2, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelG2));
         dardo2.Draw(lightingShader);
 
-        // Dardo 3
         glm::mat4 modelG3 = modelTempGlobos;
         modelG3 = glm::translate(modelG3, glm::vec3(3.7f, 4.2f, posDardo3Z));
         modelG3 = glm::rotate(modelG3, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelG3));
         dardo3.Draw(lightingShader);
 
-        // Globos (solo si están visibles)
         if (globo1Visible) {
             model = modelTempGlobos;
             glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
@@ -1079,8 +1088,6 @@ int main()
             glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
             globo3.Draw(lightingShader);
         }
-
-
 
         modelTempGlobos2 = glm::translate(modelTempGlobos, glm::vec3(-12.0f, 0.0f, 0.0f));
         model = modelTempGlobos2;
@@ -1129,6 +1136,13 @@ int main()
         model = modelTempGlobos3;
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         globo3.Draw(lightingShader);
+
+        model = glm::mat4(1);
+        model = glm::translate(model, glm::vec3(12.0f, 0.0f, 21.0f));
+        model = glm::rotate(model, glm::radians(100.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        model = glm::scale(model, glm::vec3(0.3f, 0.3f, 0.3f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        Maquina.Draw(lightingShader);
 
         lampShader.Use();
         modelLoc = glGetUniformLocation(lampShader.Program, "model");
@@ -1369,7 +1383,18 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
     }
 
 
-    if (key == GLFW_KEY_6 && action == GLFW_PRESS) {
+    if (key == GLFW_KEY_6) {
+
+        fmodSystem->playSound(sonidoGlobos, 0, false, &canalGlobos);
+
+        tipoCamara = CAMARA_TERCERA_PERSONA;
+        camera.SetYaw(0.0f);
+        camera.SetPitch(0.0f);
+        camera.UpdateVectors();
+        puedeTeclear = false;
+        insertCoinGlobos = true;
+        tiempoAnimacion = 0.0f;
+
         animarDardos = true;
         animarDardo1 = true;
         animarDardo2 = false;
@@ -1591,6 +1616,38 @@ void Animation() {
                 brazoSubiendo = true;
                 juegoHachaActivo = true;
                 tipoCamara = CAMARA_JUEGO_HACHA;
+            }
+        }
+    }
+
+    if (insertCoinGlobos) {
+        translateRick = glm::vec3(14.0f, 0.0f, 21.2f);
+        rotateRick = -164.4f;
+
+        if (brazoSubiendo) {
+            anguloBrazoRick += 2.0f;
+            if (anguloBrazoRick >= 90.0f) {
+                anguloBrazoRick = 90.0f;
+                brazoSubiendo = false;
+                pausaInsertCoin = true;
+                tiempoPausa = 0.0f;
+            }
+        }
+        else if (pausaInsertCoin) {
+            tiempoPausa += deltaTime;
+            if (tiempoPausa >= 0.3f) {
+                pausaInsertCoin = false;
+            }
+        }
+        else {
+            anguloBrazoRick -= 2.0f;
+            if (anguloBrazoRick <= 0.0f) {
+                anguloBrazoRick = 0.0f;
+                tiempoPausa = 0.0f;
+                insertCoinGlobos = false;
+                brazoSubiendo = true;
+                juegoGlobosActivo = true;
+                tipoCamara = CAMARA_JUEGO_GLOBOS;
             }
         }
     }
@@ -1855,102 +1912,93 @@ void Animation() {
         }
     }
 
-    if (juegoHachaActivo) {
-        tiempoAnimacionHacha += deltaTime;
+    if (juegoGlobosActivo) {
+        tiempoAnimacion += deltaTime;
 
-        if (!enEsperaHacha && !animarHacha) {
-            animarHacha = true;
-            rotacionHacha = 0.0f;
-            desplazamientoHacha = 0.0f;
-        }
+        if (animarDardos) {
+            float velocidad = 0.1f;
+            float impactoZ = -3.0f;
+            float limiteZ = -2.5f;
 
-        if (animarHacha) {
-            rotacionHacha -= 3.0f;               
-            desplazamientoHacha += 0.02f;       
+            if (animarDardo1) {
+                if (globo1Visible && posDardo1Z + velocidad >= impactoZ)
+                    globo1Visible = false;
 
-            if (rotacionHacha <= -360.0f) {
-                rotacionHacha = -360.0f;
+                if (posDardo1Z < limiteZ)
+                    posDardo1Z += velocidad;
+                else {
+                    animarDardo1 = false;
+                    animarDardo2 = true;
+                }
             }
 
-            if (desplazamientoHacha >= 2.5f) {
-                desplazamientoHacha = 2.5f;
-                animarHacha = false;
-                enEsperaHacha = true;
-                tiempoEsperaHacha = 0.0f;
+            else if (animarDardo2) {
+                if (globo3Visible && posDardo2Z + velocidad >= impactoZ)
+                    globo3Visible = false;
+
+                if (posDardo2Z < limiteZ)
+                    posDardo2Z += velocidad;
+                else {
+                    animarDardo2 = false;
+                    animarDardo3 = true;
+                }
+            }
+
+            else if (animarDardo3) {
+                if (globo2Visible && posDardo3Z + velocidad >= impactoZ)
+                    globo2Visible = false;
+
+                if (posDardo3Z < limiteZ)
+                    posDardo3Z += velocidad;
+                else {
+                    animarDardo3 = false;
+                    animarDardos = false;
+
+                    enEsperaDardos = true;
+                    tiempoEsperaDardos = 0.0f;
+                }
             }
         }
 
-        if (enEsperaHacha) {
-            tiempoEsperaHacha += deltaTime;
-            if (tiempoEsperaHacha >= 0.5f) {
-                enEsperaHacha = false;
+        if (enEsperaDardos) {
+            tiempoEsperaDardos += deltaTime;
+
+            if (tiempoEsperaDardos >= 0.5f ) {
+                enEsperaDardos = false;
+                animarDardos = true;
+                animarDardo1 = true;
+                animarDardo2 = false;
+                animarDardo3 = false;
+                posDardo1Z = posDardo2Z = posDardo3Z = -13.0f;
+                globo1Visible = true;
+                globo2Visible = true;
+                globo3Visible = true;
             }
         }
 
-        if (tiempoAnimacionHacha >= duracionAnimacion) {
-            juegoHachaActivo = false;
+        if (tiempoAnimacion >= duracionAnimacion) {
+            juegoGlobosActivo = false;
             puedeTeclear = true;
-            tiempoAnimacionHacha = 0.0f;
-            tiempoEsperaHacha = 0.0f;
-            enEsperaHacha = false;
-            animarHacha = false;
 
             tipoCamara = CAMARA_TERCERA_PERSONA;
             camera.SetYaw(0.0f);
             camera.SetPitch(0.0f);
             camera.UpdateVectors();
 
-            rotacionHacha = 0.0f;
-            desplazamientoHacha = 2.5f;
-            canalHacha->stop();
+            canalGlobos->stop();
+            tiempoAnimacion = 0.0f;
+            tiempoEsperaDardos = 0.0f;
+            enEsperaDardos = false;
+            animarDardos = false;
+            animarDardo1 = false;
+            animarDardo2 = false;
+            animarDardo3 = false;
+
+            posDardo1Z = posDardo2Z = posDardo3Z = -2.5f;
+            globo1Visible = globo2Visible = globo3Visible = false;
         }
     }
 
-    //Animacion de globos
-    if (animarDardos) {
-        float velocidad = 0.1f;
-        float impactoZ = -3.0f;
-        float limiteZ = -2.5f;
-
-        if (animarDardo1) {
-            if (globo1Visible && posDardo1Z + velocidad >= impactoZ)
-                globo1Visible = false;
-
-            if (posDardo1Z < limiteZ) {
-                posDardo1Z += velocidad;
-            }
-            else {
-                animarDardo1 = false;
-                animarDardo2 = true;
-            }
-        }
-
-        if (animarDardo2) {
-            if (globo3Visible && posDardo2Z + velocidad >= impactoZ)
-                globo3Visible = false;
-
-            if (posDardo2Z < limiteZ) {
-                posDardo2Z += velocidad;
-            }
-            else {
-                animarDardo2 = false;
-                animarDardo3 = true;
-            }
-        }
-
-        if (animarDardo3) {
-            if (globo2Visible && posDardo3Z + velocidad >= impactoZ)
-                globo2Visible = false;
-
-            if (posDardo3Z < limiteZ) {
-                posDardo3Z += velocidad;
-            }
-            else {
-                animarDardo3 = false;
-                animarDardos = false;
-            }
-        }
-    }
 
 
 }
