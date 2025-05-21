@@ -45,7 +45,8 @@ enum TipoCamara {
     CAMARA_JUEGO_TOPOS,
     CAMARA_JUEGO_BATEO,
     CAMARA_JUEGO_BOLOS,
-    CAMARA_JUEGO_DADOS
+    CAMARA_JUEGO_DADOS,
+    CAMARA_JUEGO_HACHA
 };
 TipoCamara tipoCamara = CAMARA_TERCERA_PERSONA;
 glm::vec3 dronePos = glm::vec3(0.0f, 60.0f, 0.0f);
@@ -78,10 +79,12 @@ bool juegoToposActivo = false;
 bool juegoBatearActivo = false;
 bool juegoBolosActivo = false;
 bool juegoDadosActivo = false;
+bool juegoHachaActivo = false;
 bool insertCoinTopos = false;
 bool insertCoinBatear = false;
 bool insertCoinBolos = false;
 bool insertCoinDados = false;
+bool insertCoinHacha = false;
 
 bool puedeTeclear = true;
 bool esDeNoche = false;
@@ -105,8 +108,10 @@ float tiempoPausa = 0.0f;
 bool animarHacha = false;
 bool hachaDesplazando = false;
 float rotacionHacha = 0.0f;
-float desplazamientoHacha = 0.0f; // moverá el hacha hacia el fondo
-
+float desplazamientoHacha = 0.0f; 
+float tiempoEsperaHacha = 0.0f;
+bool enEsperaHacha = false;
+float tiempoAnimacionHacha = 0.0f;
 
 // Animación de dados
 bool animarDados = false;
@@ -302,8 +307,12 @@ int main()
     Shader lampShader("Shader/lamp.vs", "Shader/lamp.frag");
     Shader skyboxshader("Shader/SkyBox.vs", "Shader/SkyBox.frag");
 
+    //Modelo Feria
     Model Feria((char*)"Models/Feria.obj");
+    Model Luces((char*)"Models/luces/luces.obj");
     Model Finn((char*)"Models/texturas_finn/finn.obj");
+
+    //Modelo Rick
     Model RickCuerpo((char*)"Models/RickCuerpo.obj");
     Model RickCabeza((char*)"Models/RickCabeza.obj");
     Model RickBrazoD((char*)"Models/RickBrazoD.obj");
@@ -538,6 +547,12 @@ int main()
             camera.SetPitch(-15.0f);
             camera.UpdateVectors();
         }
+        if (tipoCamara == CAMARA_JUEGO_HACHA) {
+            camera.SetPosition(glm::vec3(17.0f, 3.5f, -20.0f));
+            camera.SetYaw(270.0f);
+            camera.SetPitch(-15.0f);
+            camera.UpdateVectors();
+        }
 
         glm::mat4 view;
         view = camera.GetViewMatrix();
@@ -553,6 +568,10 @@ int main()
         glm::mat4 model = glm::mat4(1);
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         Feria.Draw(lightingShader);
+        
+        model = glm::mat4(1);
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        Luces.Draw(lightingShader);
 
         //RICK
 
@@ -789,31 +808,34 @@ int main()
 
         //HACHA
 
-        glm::mat4 modelTempHacha = glm::mat4(1.0f); //Temp
+        glm::mat4 modelTempHacha = glm::mat4(1.0f);
         modelTempHacha = model = glm::mat4(1.0f);
         modelTempHacha = model = glm::translate(model, glm::vec3(17.0f, 0.15f, -22.0f));
         modelTempHacha = model = glm::scale(model, glm::vec3(0.08f, 0.08f, 0.08f));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         cajaHacha.Draw(lightingShader);
-
-        //dibujo de hacha animada
         modelTempHacha = glm::translate(glm::mat4(1.0f), glm::vec3(17.0f, 2.3f, -22.0f - desplazamientoHacha));
-        modelTempHacha = glm::rotate(modelTempHacha, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, -0.4f)); // ← rotación fija inicial
-        modelTempHacha = glm::scale(modelTempHacha, glm::vec3(0.08f)); // escala como siempre
+        modelTempHacha = glm::rotate(modelTempHacha, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, -0.4f));
+        modelTempHacha = glm::scale(modelTempHacha, glm::vec3(0.08f));
         glm::mat4 modelHacha = modelTempHacha;
-        modelHacha = glm::translate(modelHacha, glm::vec3(0.0f, 0.5f, 0.0f));  // punto de pivote, ajusta si rota raro
-        modelHacha = glm::rotate(modelHacha, glm::radians(rotacionHacha), glm::vec3(0.0f, 0.0f, 1.0f)); // eje X: cae hacia caja
-        modelHacha = glm::translate(modelHacha, glm::vec3(0.0f, -0.5f, 0.0f)); // deshace el pivote
+        modelHacha = glm::translate(modelHacha, glm::vec3(0.0f, 0.5f, 0.0f));
+        modelHacha = glm::rotate(modelHacha, glm::radians(rotacionHacha), glm::vec3(0.0f, 0.0f, 1.0f));
+        modelHacha = glm::translate(modelHacha, glm::vec3(0.0f, -0.5f, 0.0f));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelHacha));
         hacha.Draw(lightingShader);
-
-
 
         model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(17.0f, 0.15f, -22.0f));
         model = glm::scale(model, glm::vec3(0.08f, 0.08f, 0.08f));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         reja.Draw(lightingShader);
+
+        model = glm::mat4(1);
+        model = glm::translate(model, glm::vec3(22.0f, 0.0f, -21.0f));
+        model = glm::rotate(model, glm::radians(280.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        model = glm::scale(model, glm::vec3(0.3f, 0.3f, 0.3f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        Maquina.Draw(lightingShader);
 
         //BOLOS
 
@@ -1226,8 +1248,13 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
         rotX5 = rotY5 = rotZ5 = 0.0f;
     }
 
-    if (key == GLFW_KEY_4 && action == GLFW_PRESS) {
-        animarHacha = true;
+    if (key == GLFW_KEY_4) {
+        tipoCamara = CAMARA_TERCERA_PERSONA;
+        camera.SetYaw(0.0f);
+        camera.SetPitch(0.0f);
+        camera.UpdateVectors();
+        puedeTeclear = false;
+        insertCoinHacha = true;
         hachaDesplazando = false;
         rotacionHacha = 0.0f;
         desplazamientoHacha = 0.0f;
@@ -1431,6 +1458,38 @@ void Animation() {
                 brazoSubiendo = true;
                 juegoDadosActivo = true;
                 tipoCamara = CAMARA_JUEGO_DADOS;
+            }
+        }
+    }
+
+    if (insertCoinHacha) {
+        translateRick = glm::vec3(19.3f, 0.0f, -21.0f);
+        rotateRick = 17.2f;
+
+        if (brazoSubiendo) {
+            anguloBrazoRick += 2.0f;
+            if (anguloBrazoRick >= 90.0f) {
+                anguloBrazoRick = 90.0f;
+                brazoSubiendo = false;
+                pausaInsertCoin = true;
+                tiempoPausa = 0.0f;
+            }
+        }
+        else if (pausaInsertCoin) {
+            tiempoPausa += deltaTime;
+            if (tiempoPausa >= 0.3f) {
+                pausaInsertCoin = false;
+            }
+        }
+        else {
+            anguloBrazoRick -= 2.0f;
+            if (anguloBrazoRick <= 0.0f) {
+                anguloBrazoRick = 0.0f;
+                tiempoPausa = 0.0f;
+                insertCoinHacha = false;
+                brazoSubiendo = true;
+                juegoHachaActivo = true;
+                tipoCamara = CAMARA_JUEGO_HACHA;
             }
         }
     }
@@ -1691,21 +1750,55 @@ void Animation() {
         }
     }
 
-    //Animacion de hacha
-    if (animarHacha) {
-        rotacionHacha -= 3.0f;                // Gira al revés
-        desplazamientoHacha += 0.02f;         // Se mueve al mismo tiempo
+    if (juegoHachaActivo) {
+        tiempoAnimacionHacha += deltaTime;
 
-        if (rotacionHacha <= -360.0f) {
-            rotacionHacha = -360.0f;
+        if (!enEsperaHacha && !animarHacha) {
+            animarHacha = true;
+            rotacionHacha = 0.0f;
+            desplazamientoHacha = 0.0f;
         }
 
-        if (desplazamientoHacha >= 2.5f) {
+        if (animarHacha) {
+            rotacionHacha -= 3.0f;               
+            desplazamientoHacha += 0.02f;       
+
+            if (rotacionHacha <= -360.0f) {
+                rotacionHacha = -360.0f;
+            }
+
+            if (desplazamientoHacha >= 2.5f) {
+                desplazamientoHacha = 2.5f;
+                animarHacha = false;
+                enEsperaHacha = true;
+                tiempoEsperaHacha = 0.0f;
+            }
+        }
+
+        if (enEsperaHacha) {
+            tiempoEsperaHacha += deltaTime;
+            if (tiempoEsperaHacha >= 0.5f) {
+                enEsperaHacha = false;
+            }
+        }
+
+        if (tiempoAnimacionHacha >= duracionAnimacion) {
+            juegoHachaActivo = false;
+            puedeTeclear = true;
+            tiempoAnimacionHacha = 0.0f;
+            tiempoEsperaHacha = 0.0f;
+            enEsperaHacha = false;
+            animarHacha = false;
+
+            tipoCamara = CAMARA_TERCERA_PERSONA;
+            camera.SetYaw(0.0f);
+            camera.SetPitch(0.0f);
+            camera.UpdateVectors();
+
+            rotacionHacha = 0.0f;
             desplazamientoHacha = 2.5f;
-            animarHacha = false;              // Detiene todo
         }
     }
-
 
 
 }
