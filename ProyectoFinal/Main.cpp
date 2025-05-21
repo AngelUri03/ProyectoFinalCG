@@ -10,6 +10,8 @@
 #include <GLFW/glfw3.h>
 #include "stb_image.h"
 #include <thread>
+#include <fmod.hpp>
+#include <fmod_errors.h>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -55,6 +57,23 @@ float droneDistance = 0.0f;
 float maxArmLength = 50.0f;
 int droneDir = 0;
 bool goingOut = true;
+
+//Sonido
+FMOD::System* fmodSystem = nullptr;
+FMOD::Sound* sonidoFeria = nullptr;
+FMOD::Sound* sonidoTopos = nullptr;
+FMOD::Sound* sonidoBateo = nullptr;
+FMOD::Sound* sonidoDados = nullptr;
+FMOD::Sound* sonidoHacha = nullptr;
+FMOD::Sound* sonidoBolos = nullptr;
+FMOD::Sound* sonidoGlobos = nullptr;
+FMOD::Channel* canalFeria = nullptr;
+FMOD::Channel* canalTopos = nullptr;
+FMOD::Channel* canalBateo = nullptr;
+FMOD::Channel* canalDados = nullptr;
+FMOD::Channel* canalHacha = nullptr;
+FMOD::Channel* canalBolos = nullptr;
+FMOD::Channel* canalGlobos = nullptr;
 
 //Rick
 float rotateRickCabeza = 0.0f;
@@ -278,6 +297,19 @@ int main()
 {
     glfwInit();
 
+    FMOD_RESULT resultado;
+    resultado = FMOD::System_Create(&fmodSystem);
+    if (resultado != FMOD_OK) {
+        std::cerr << "FMOD error: " << FMOD_ErrorString(resultado) << std::endl;
+        return EXIT_FAILURE;
+    }
+
+    resultado = fmodSystem->init(512, FMOD_INIT_NORMAL, 0);
+    if (resultado != FMOD_OK) {
+        std::cerr << "FMOD error: " << FMOD_ErrorString(resultado) << std::endl;
+        return EXIT_FAILURE;
+    }
+
     GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Proyecto Final", nullptr, nullptr);
 
     if (nullptr == window)
@@ -365,6 +397,16 @@ int main()
     //Modelos Maquina Monedas
     Model Maquina((char*)"Models/monedas/maquina.obj");
 
+    fmodSystem->createSound("sonidos/feria.mp3", FMOD_LOOP_NORMAL | FMOD_2D, 0, &sonidoFeria);
+    fmodSystem->playSound(sonidoFeria, 0, false, &canalFeria);
+
+    fmodSystem->createSound("sonidos/topos.mp3", FMOD_DEFAULT, 0, &sonidoTopos);
+    fmodSystem->createSound("sonidos/bateo.mp3", FMOD_DEFAULT, 0, &sonidoBateo);
+    fmodSystem->createSound("sonidos/dados.mp3", FMOD_DEFAULT, 0, &sonidoDados);
+    fmodSystem->createSound("sonidos/hacha.mp3", FMOD_DEFAULT, 0, &sonidoHacha);
+    fmodSystem->createSound("sonidos/bolos.mp3", FMOD_DEFAULT, 0, &sonidoBolos);
+    fmodSystem->createSound("sonidos/globos.mp3", FMOD_DEFAULT, 0, &sonidoGlobos);
+
     GLuint VBO, VAO, EBO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
@@ -415,6 +457,7 @@ int main()
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
+        fmodSystem->update();
         glfwPollEvents();
         DoMovement();
         Animation();
@@ -1092,6 +1135,16 @@ int main()
     glDeleteVertexArrays(1, &skyboxVAO);
     glDeleteBuffers(1, &skyboxVAO);
 
+    sonidoFeria->release();
+    sonidoTopos->release();
+    sonidoBateo->release();
+    sonidoDados->release();
+    sonidoHacha->release();
+    sonidoBolos->release();
+    sonidoGlobos->release();
+    fmodSystem->close();
+    fmodSystem->release();
+
     glfwTerminate();
 
 
@@ -1204,6 +1257,7 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
     }
 
     if (key == GLFW_KEY_1) {
+        fmodSystem->playSound(sonidoTopos, 0, false, &canalTopos);
         tipoCamara = CAMARA_TERCERA_PERSONA;
         camera.SetYaw(0.0f);
         camera.SetPitch(0.0f);
@@ -1214,6 +1268,7 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
     }
 
     if (key == GLFW_KEY_2) {
+        fmodSystem->playSound(sonidoBateo, 0, false, &canalBateo);
         tipoCamara = CAMARA_TERCERA_PERSONA;
         camera.SetYaw(0.0f);
         camera.SetPitch(0.0f);
@@ -1233,6 +1288,7 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
         bateGolpeo = false;
     }
     if (key == GLFW_KEY_3) {
+        fmodSystem->playSound(sonidoDados, 0, false, &canalDados);
         tipoCamara = CAMARA_TERCERA_PERSONA;
         camera.SetYaw(0.0f);
         camera.SetPitch(0.0f);
@@ -1249,6 +1305,7 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
     }
 
     if (key == GLFW_KEY_4) {
+        fmodSystem->playSound(sonidoHacha, 0, false, &canalHacha);
         tipoCamara = CAMARA_TERCERA_PERSONA;
         camera.SetYaw(0.0f);
         camera.SetPitch(0.0f);
@@ -1262,12 +1319,12 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
 
 
     if (key == GLFW_KEY_5) {
-        puedeTeclear = false;
+        fmodSystem->playSound(sonidoBolos, 0, false, &canalBolos);
         tipoCamara = CAMARA_TERCERA_PERSONA;
         camera.SetYaw(0.0f);
         camera.SetPitch(0.0f);
         camera.UpdateVectors();
-
+        puedeTeclear = false;
         insertCoinBolos = true;
         tiempoAnimacion = 0.0f;
 
@@ -1278,7 +1335,6 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
         pinoPosY = 0.5f;
         pinosCaidos = false;
     }
-
 
 }
 
@@ -1582,6 +1638,7 @@ void Animation() {
             camera.SetYaw(0.0f);
             camera.SetPitch(0.0f);
             camera.UpdateVectors();
+            canalTopos->stop();
         }
     }
 
@@ -1651,6 +1708,7 @@ void Animation() {
             camera.SetYaw(0.0f);
             camera.SetPitch(0.0f);
             camera.UpdateVectors();
+            canalBateo->stop();
         }
     }
 
@@ -1695,6 +1753,7 @@ void Animation() {
             camera.SetYaw(0.0f);
             camera.SetPitch(0.0f);
             camera.UpdateVectors();
+            canalBolos->stop();
         }
     }
 
@@ -1747,6 +1806,7 @@ void Animation() {
             rotX3 = rotY3 = rotZ3 = 0.0f;
             rotX4 = rotY4 = rotZ4 = 0.0f;
             rotX5 = rotY5 = rotZ5 = 0.0f;
+            canalDados->stop();
         }
     }
 
@@ -1797,6 +1857,7 @@ void Animation() {
 
             rotacionHacha = 0.0f;
             desplazamientoHacha = 2.5f;
+            canalHacha->stop();
         }
     }
 
