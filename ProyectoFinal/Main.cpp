@@ -1720,6 +1720,7 @@ void Animation() {
         }
     }
 
+    //Animacion hacha 
     if (insertCoinHacha) {
         translateRick = glm::vec3(19.3f, 0.0f, -21.0f);
         rotateRick = 17.2f;
@@ -1751,6 +1752,7 @@ void Animation() {
             }
         }
     }
+
 
     if (insertCoinGlobos) {
         translateRick = glm::vec3(14.0f, 0.0f, 21.2f);
@@ -2041,6 +2043,57 @@ void Animation() {
             rotX4 = rotY4 = rotZ4 = 0.0f;
             rotX5 = rotY5 = rotZ5 = 0.0f;
             canalDados->stop();
+        }
+    }
+
+    if (juegoHachaActivo) {
+        tiempoAnimacionHacha += deltaTime;
+
+        if (!enEsperaHacha && !animarHacha) {
+            animarHacha = true;
+            rotacionHacha = 0.0f;
+            desplazamientoHacha = 0.0f;
+        }
+
+        if (animarHacha) {
+            rotacionHacha -= 3.0f;
+            desplazamientoHacha += 0.02f;
+
+            if (rotacionHacha <= -360.0f) {
+                rotacionHacha = -360.0f;
+            }
+
+            if (desplazamientoHacha >= 2.5f) {
+                desplazamientoHacha = 2.5f;
+                animarHacha = false;
+                enEsperaHacha = true;
+                tiempoEsperaHacha = 0.0f;
+            }
+        }
+
+        if (enEsperaHacha) {
+            tiempoEsperaHacha += deltaTime;
+            if (tiempoEsperaHacha >= 0.5f) {
+                enEsperaHacha = false;
+            }
+        }
+
+        if (tiempoAnimacionHacha >= duracionAnimacion) {
+            juegoHachaActivo = false;
+            puedeTeclear = true;
+            tiempoAnimacionHacha = 0.0f;
+            tiempoEsperaHacha = 0.0f;
+            enEsperaHacha = false;
+            animarHacha = false;
+
+            tipoCamara = CAMARA_TERCERA_PERSONA;
+            camera.SetYaw(0.0f);
+            camera.SetPitch(0.0f);
+            camera.UpdateVectors();
+
+            rotacionHacha = 0.0f;
+            desplazamientoHacha = 2.5f;
+            canalHacha->stop();
         }
     }
 
